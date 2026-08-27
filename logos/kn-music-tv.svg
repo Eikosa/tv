@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#0d47a1"/><stop offset="1" stop-color="#00acc1"/></linearGradient></defs>
+  <rect width="800" height="450" rx="36" fill="url(#g)"/>
+  <circle cx="400" cy="175" r="82" fill="#ffffff" opacity=".16"/>
+  <path d="M365 225h70M400 190v70" stroke="#fff" stroke-width="18" stroke-linecap="round"/>
+  <text x="400" y="335" text-anchor="middle" font-family="Arial,sans-serif" font-size="58" font-weight="700" fill="#fff">KN MUSIC TV</text>
+</svg>

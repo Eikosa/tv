@@ -1,0 +1,62 @@
+name: Build CloudStream plugin
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "*.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Checkout builds branch
+        uses: actions/checkout@v4
+        with:
+          ref: builds
+          path: builds
+        continue-on-error: true
+
+      - name: Prepare builds branch
+        shell: bash
+        run: |
+          mkdir -p builds
+          find builds -maxdepth 1 -type f -name '*.cs3' -delete
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 11
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build plugin
+        run: |
+          chmod +x gradlew
+          ./gradlew make makePluginsJson
+          cp TurkiyeTV/build/*.cs3 builds/
+          cp build/plugins.json builds/
+
+      - name: Publish builds branch
+        shell: bash
+        run: |
+          cd builds
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Build ${GITHUB_SHA}"
+          git branch -M builds
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin builds
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
