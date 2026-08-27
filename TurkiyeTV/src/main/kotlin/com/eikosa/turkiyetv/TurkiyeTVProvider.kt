@@ -12,6 +12,7 @@ import com.lagradost.cloudstream3.newLiveStreamLoadResponse
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ExtractorLinkType
 import com.lagradost.cloudstream3.utils.Qualities
+import com.lagradost.cloudstream3.utils.loadExtractor
 import com.lagradost.cloudstream3.utils.newExtractorLink
 
 private data class TvChannel(
@@ -30,6 +31,32 @@ private const val TEVE2_APP_ID = "6aab838a-437e-4a1b-bbd0-e30f79cdbbbd"
 private const val TEVE2_SID_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789"
 private const val TEVE2_USER_AGENT =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+private const val FALLBACK_LOGO =
+    "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png"
+
+private fun tvGardenChannel(
+    id: String,
+    name: String,
+    streamUrl: String,
+    group: String,
+    channelNumber: Int,
+    logoUrl: String = FALLBACK_LOGO,
+) = TvChannel(id, name, streamUrl, logoUrl, group, channelNumber)
+
+private fun youtubeChannel(
+    id: String,
+    name: String,
+    videoId: String,
+    group: String,
+    channelNumber: Int,
+) = TvChannel(
+    id = "YouTube_$id",
+    name = name,
+    streamUrl = "https://www.youtube.com/watch?v=$videoId",
+    logoUrl = "https://i.ytimg.com/vi/$videoId/hqdefault.jpg",
+    group = group,
+    channelNumber = channelNumber,
+)
 
 class TurkiyeTVProvider : MainAPI() {
     override var mainUrl = "https://github.com/Eikosa/tv"
@@ -38,7 +65,6 @@ class TurkiyeTVProvider : MainAPI() {
     override val supportedTypes = setOf(TvType.Live)
     override val hasMainPage = true
     override val mainPage = listOf(
-        com.lagradost.cloudstream3.mainPage("featured", "Öne Çıkanlar"),
         com.lagradost.cloudstream3.mainPage("general", "Genel / Ulusal"),
         com.lagradost.cloudstream3.mainPage("news", "Haber"),
         com.lagradost.cloudstream3.mainPage("sports", "Spor"),
@@ -47,11 +73,104 @@ class TurkiyeTVProvider : MainAPI() {
         com.lagradost.cloudstream3.mainPage("culture", "Belgesel / Kültür"),
         com.lagradost.cloudstream3.mainPage("religion", "Dini"),
         com.lagradost.cloudstream3.mainPage("entertainment", "Eğlence / Yaşam"),
+        com.lagradost.cloudstream3.mainPage("youtube", "YouTube / Dizi"),
         com.lagradost.cloudstream3.mainPage("local", "Yerel / Diğer"),
     )
 
     // Popüler ulusal ve haber kanalları önce, daha nadir/yerel kanallar sonra listelenir.
-    // 98 statik yayın ve logo adresi 27 Ağustos 2026 tarihinde erişim testiyle doğrulandı.
+    // TV Garden'dan alınan yeni adresler de eklenmeden önce HTTP ve HLS playlist testiyle doğrulandı.
+    private val tvGardenChannels = listOf(
+        tvGardenChannel("TVGarden_ArasTV", "Aras TV", "https://2.rtmp.org/tv217/yayin.stream/playlist.m3u8", "Yerel", 101),
+        tvGardenChannel("TVGarden_ASTV", "AS TV", "https://live.artidijitalmedya.com/artidijital_astv/astv/playlist.m3u8", "Yerel" , 102),
+        tvGardenChannel("TVGarden_BiKanal", "Bi Kanal", "https://bikanal-live.ercdn.net/bikanal/bikanal.m3u8", "Yerel", 103),
+        tvGardenChannel("TVGarden_BodrumKentTV", "Bodrum Kent TV", "https://edge2.taksimbilisim.com/bodrumkenttv/bant1/playlist.m3u8", "Yerel", 104),
+        tvGardenChannel("TVGarden_BRTV", "BRTV", "https://live.artidijitalmedya.com/artidijital_brtv/brtv/playlist.m3u8", "Yerel", 106, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/brtv-tr.png"),
+        tvGardenChannel("TVGarden_Cine1", "Cine 1", "https://canliyayin.cine1.com.tr/memfs/cbaef080-a742-4644-9e9e-2b9f6a5103c3_output_0.m3u8", "İş / Dizi", 107),
+        tvGardenChannel("TVGarden_DenizPostasi", "Deniz Postası TV", "https://live.artidijitalmedya.com/artidijital_denizpostasi/denizpostasi/playlist.m3u8", "Haber", 108),
+        tvGardenChannel("TVGarden_EkolSports", "Ekol Sports", "https://ekoltv-live.ercdn.net/ekolsport/ekolsport.m3u8", "Spor", 109),
+        tvGardenChannel("TVGarden_EkolTV", "Ekol TV", "https://ekoltv-live.ercdn.net/ekoltv/ekoltv.m3u8", "Haber", 110),
+        tvGardenChannel("TVGarden_ErciyesTV", "Erciyes TV", "https://live.artidijitalmedya.com/artidijital_erciyestv/erciyestv/playlist.m3u8", "Yerel", 111),
+        tvGardenChannel("TVGarden_ERTV", "ERTV", "https://live.artidijitalmedya.com/artidijital_ertv_new/ertv/playlist.m3u8", "Yerel", 112),
+        tvGardenChannel("TVGarden_Haber61", "Haber61 TV", "https://cdn-haber61tv.yayin.com.tr/haber61tv/smil:haber61tv.smil/index.m3u8", "Haber", 113),
+        tvGardenChannel("TVGarden_HunatTV", "Hunat TV", "https://live.artidijitalmedya.com/artidijital_hunattv/hunattv/playlist.m3u8", "Yerel", 114),
+        tvGardenChannel("TVGarden_IcelTV", "İçel TV", "https://edge1.taksimbilisim.com/iceltv/bant1/playlist.m3u8", "Yerel", 115),
+        tvGardenChannel("TVGarden_Kanal15", "Kanal 15", "https://live.artidijitalmedya.com/artidijital_kanal15/kanal15/playlist.m3u8", "Yerel", 116, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-15-tr.png"),
+        tvGardenChannel("TVGarden_Kanal26", "Kanal 26", "https://live.artidijitalmedya.com/artidijital_kanal26/kanal26/playlist.m3u8", "Yerel", 117, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-26-tr.png"),
+        tvGardenChannel("TVGarden_Kanal3", "Kanal 3", "https://live.artidijitalmedya.com/artidijital_kanal3/kanal3/playlist.m3u8", "Yerel", 118, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal3-tr.png"),
+        tvGardenChannel("TVGarden_Kanal33", "Kanal 33", "https://edge2.taksimbilisim.com/kanal33/bant1/playlist.m3u8", "Yerel", 119, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-33-tr.png"),
+        tvGardenChannel("TVGarden_Kanal34", "Kanal 34", "https://live.euromediacenter.com/kanal34/tracks-v1a1/playlist.m3u8", "Yerel", 120),
+        tvGardenChannel("TVGarden_Kanal58", "Kanal 58", "https://live.artidijitalmedya.com/artidijital_kanal58/kanal58/playlist.m3u8", "Yerel", 121, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-58-tr.png"),
+        tvGardenChannel("TVGarden_Kanal7Avrupa", "Kanal 7 Avrupa", "https://livetv.radyotvonline.net/kanal7live/kanal7avr/playlist.m3u8", "Genel", 122, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-7-avrupa-tr.png"),
+        tvGardenChannel("TVGarden_KanalAvrupa", "Kanal Avrupa", "https://cdn-kanalavrupa.yayin.com.tr/kanalavrupa/tracks-v2a1/playlist.m3u8", "Genel", 123, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-avrupa-tr.png"),
+        tvGardenChannel("TVGarden_KanalB", "Kanal B", "https://tv.kanalb.tr/hls/kanalb/index.m3u8", "Haber", 124, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-b-tr.png"),
+        tvGardenChannel("TVGarden_KanalFirat", "Kanal Fırat", "https://live.artidijitalmedya.com/artidijital_kanalfirat/kanalfirat/playlist.m3u8", "Yerel", 125, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-firat-tr.png"),
+        tvGardenChannel("TVGarden_KanalHayat", "Kanal Hayat", "https://tbn02a.ltnschedule.com/hls/nx21i.m3u8", "Dini", 126),
+        tvGardenChannel("TVGarden_KanalPlus", "Kanal Plus", "https://live.artidijitalmedya.com/artidijital_kanalplus/kanalplus/mpeg/playlist.m3u8", "Yerel", 127),
+        tvGardenChannel("TVGarden_KanalV", "Kanal V", "https://live.artidijitalmedya.com/artidijital_kanalv/kanalv/playlist.m3u8", "Yerel", 128, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-v-tr.png"),
+        tvGardenChannel("TVGarden_KaradenizTV", "Karadeniz TV", "https://panel.5gtvhosting.com/hls/karadeniztv/karadeniztv.m3u8", "Yerel", 129),
+        tvGardenChannel("TVGarden_KayTV", "Kay TV", "https://live.artidijitalmedya.com/artidijital_kaytv/kaytv/playlist.m3u8", "Yerel", 130),
+        tvGardenChannel("TVGarden_KentTurk", "Kent Türk", "https://live.artidijitalmedya.com/artidijital_kentturktv/kentturktv/playlist.m3u8", "Yerel", 131, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kent-turk-tr.png"),
+        tvGardenChannel("TVGarden_LineTV", "Line TV", "https://edge2.taksimbilisim.com/linetv/bant1/playlist.m3u8", "Yerel", 132, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/line-tv-tr.png"),
+        tvGardenChannel("TVGarden_LuysTV", "Luys TV", "https://b01c02nl.mediatriple.net/videoonlylive/mtpayqrfkgirxelive/broadcast_5e91c5ac96898.smil/playlist.m3u8", "Yerel", 133),
+        tvGardenChannel("TVGarden_MaviKaradeniz", "MaviKaradeniz TV", "https://live.artidijitalmedya.com/artidijital_mavikaradeniz/mavikaradeniz/playlist.m3u8", "Yerel", 134, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/mavi-karadeniz-tr.png"),
+        tvGardenChannel("TVGarden_MercanTV", "Mercan TV", "https://live.artidijitalmedya.com/artidijital_mercantv/mercantv/playlist.m3u8", "Yerel", 135, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/mercan-tv-tr.png"),
+        tvGardenChannel("TVGarden_OlayTurk", "OlayTürk TV", "https://live.artidijitalmedya.com/artidijital_olayturk/olayturk/playlist.m3u8", "Haber", 136),
+        tvGardenChannel("TVGarden_PowerAkustik", "PowerTürk Akustik", "https://livetv.powerapp.com.tr/pturkakustik/akustik.smil/playlist.m3u8", "Müzik", 137, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/powerturk-tr.png"),
+        tvGardenChannel("TVGarden_PowerSlow", "PowerTürk Slow", "https://livetv.powerapp.com.tr/pturkslow/slow.smil/playlist.m3u8", "Müzik", 138, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/powerturk-tr.png"),
+        tvGardenChannel("TVGarden_PowerTaptaze", "PowerTürk Taptaze", "https://livetv.powerapp.com.tr/pturktaptaze/taptaze.smil/playlist.m3u8", "Müzik", 139, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/powerturk-tr.png"),
+        tvGardenChannel("TVGarden_RuhaTV", "Ruha TV", "https://ruhatv.radyotelekom.com.tr:3515/live/ruhatvlive.m3u8", "Yerel", 140),
+        tvGardenChannel("TVGarden_Semerkand", "Semerkand TV", "https://b01c02nl.mediatriple.net/videoonlylive/mtisvwurbfcyslive/broadcast_58d915bd40efc.smil/playlist.m3u8", "Dini", 141, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/semerkand-tv-tr.png"),
+        tvGardenChannel("TVGarden_SonmezTV", "Sönmez TV", "https://sonmeztv.ozelip.com.tr:3826/live/sonmeztvlive.m3u8", "Yerel", 142),
+        tvGardenChannel("TVGarden_SunRTV", "Sun RTV", "https://live.artidijitalmedya.com/artidijital_sunrtv/sunrtv/playlist.m3u8", "Yerel", 143),
+        tvGardenChannel("TVGarden_Telenews", "Telenews", "https://cdn-telenews.yayin.com.tr/telenews/tracks-v1a1/playlist.m3u8", "Haber", 144),
+        tvGardenChannel("TVGarden_TonTV", "Ton TV", "https://live.artidijitalmedya.com/artidijital_tontv/tontv/playlist.m3u8", "Yerel", 145),
+        tvGardenChannel("TVGarden_TrakyaTurk", "Trakya Türk", "https://live.euromediacenter.com/trakyaturk/tracks-v1a1/playlist.m3u8", "Yerel", 146),
+        tvGardenChannel("TVGarden_TRTArabi", "TRT Arabi", "https://tv-trtarabi.medya.trt.com.tr/master.m3u8", "Genel", 147, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/trt-arabi-tr.png"),
+        tvGardenChannel("TVGarden_TurkHaber", "TürkHaber TV", "https://edge2.taksimbilisim.com/turkhaber/bant1/playlist.m3u8", "Haber", 148, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/turk-haber-tr.png"),
+        tvGardenChannel("TVGarden_TV41", "TV 41", "https://live.artidijitalmedya.com/artidijital_tv41/tv41/playlist.m3u8", "Yerel", 149),
+        tvGardenChannel("TVGarden_TV52", "TV 52", "https://edge2.taksimbilisim.com/tv52/bant1/chunks.m3u8", "Yerel", 150, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/tv52-tr.png"),
+        tvGardenChannel("TVGarden_TVDen", "TV Den", "https://canli.tvden.com.tr/hls/live.m3u8", "Yerel", 151, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/tv-den-tr.png"),
+        tvGardenChannel("TVGarden_TYTTurk", "TYT Türk", "https://tytturk-live.ercdn.net/tytturk/tytturk.m3u8", "Genel", 152),
+    )
+
+    // TV Garden ve kullanıcı tarafından verilen, oEmbed ile doğrulanan YouTube yayınları.
+    // Oynatma CloudStream'in yerleşik YoutubeExtractor'ı üzerinden yapılır.
+    private val youtubeChannels = listOf(
+        youtubeChannel("CNNTurk", "CNN TÜRK", "6N8_r2uwLEc", "Haber", 201),
+        youtubeChannel("SozcuTV", "SÖZCÜ TV", "ztmY_cCtUl0", "Haber", 202),
+        youtubeChannel("BloombergHT", "Bloomberg HT", "5ngQ40FQHv0", "Haber", 203),
+        youtubeChannel("APara", "A Para", "Fas1VhgP8Uk", "Haber", 204),
+        youtubeChannel("Benguturk", "Bengütürk TV", "MOhcWsOL1Us", "Haber", 205),
+        youtubeChannel("KRT", "KRT TV", "_k0wG2Qah1g", "Haber", 206),
+        youtubeChannel("LiderHaber", "Lider Haber", "8nt4AKdiMqM", "Haber", 207),
+        youtubeChannel("TV100", "TV 100", "4WSvLRk83-c", "Haber", 208),
+        youtubeChannel("UlusalKanal", "Ulusal Kanal", "Gcxkjxhbhk8", "Haber", 209),
+        youtubeChannel("BeINSports", "beIN SPORTS Türkiye", "i7UpPgxfZZ8", "Spor", 210),
+        youtubeChannel("CartoonNetwork", "Cartoon Network Türkiye", "JyMeD9wfMZQ", "Çocuk", 211),
+        youtubeChannel("KralSakir", "Cartoon Network Türkiye: Kral Şakir", "5Whk9MVTpI4", "Çocuk", 212),
+        youtubeChannel("Cartoonito", "Cartoonito Türkiye", "XDSd6m4SauI", "Çocuk", 213),
+        youtubeChannel("Gumball", "Gumball", "9LDR3lHACKM", "Çocuk", 214),
+        youtubeChannel("AskNeva", "Aşk-ı Nevâ", "2aAuvDd2tSo", "Dini", 215),
+        youtubeChannel("CAHMedya", "CAH Medya", "DL99RVqsAvg", "Dini", 216),
+        youtubeChannel("Ibrahimlive", "İbrahimlive", "uUL6u3mNQyg", "Dini", 217),
+        youtubeChannel("AnkaraBB", "Ankara Büyükşehir Belediyesi", "B-84y-luaTs", "Yerel", 218),
+        youtubeChannel("GuldurGuldur", "Güldür Güldür Show", "6iTXnuBXXqI", "Eğlence", 219),
+        youtubeChannel("GulsahFilm", "Gülşah Film: Kemal Sunal Filmleri", "8AkJ9BgYB-c", "Dizi / YouTube", 220),
+        youtubeChannel("KemalSunal", "Kemal Sunal: Filmleri ve Sahneleri", "qWDd505ciJQ", "Dizi / YouTube", 221),
+        youtubeChannel("MuhteşemYuzyil", "Muhteşem Yüzyıl", "tZxD_s29JZc", "Dizi / YouTube", 222),
+        youtubeChannel("LeylaMecnun", "Leyla ile Mecnun", "3nlND4audLg", "Dizi / YouTube", 223),
+        youtubeChannel("Seksenler", "Seksenler", "qGYlF1MiMxw", "Dizi / YouTube", 224),
+        youtubeChannel("AvrupaYakasi", "Avrupa Yakası", "NGsjOrzwjZk", "Dizi / YouTube", 225),
+        youtubeChannel("AleminKirali", "Alemin Kıralı", "avDRwKKjeSI", "Dizi / YouTube", 226),
+        youtubeChannel("YalanDunya", "Yalan Dünya", "Efh06uzzORM", "Dizi / YouTube", 227),
+        youtubeChannel("AskMemnu", "Aşk-ı Memnu", "JpP13Wp1ke0", "Dizi / YouTube", 228),
+        youtubeChannel("Yesilcam", "Yeşilçam", "NqbUZyS58u8", "Dizi / YouTube", 229),
+        youtubeChannel("Adanali", "Adanalı", "sF1AgroEr60", "Dizi / YouTube", 230),
+        youtubeChannel("EmretKomutanim", "Emret Komutanım", "b4U9nt3s128", "Dizi / YouTube", 231),
+        youtubeChannel("CocuklarDuymasin", "Çocuklar Duymasın", "g7oVIIevRMk", "Dizi / YouTube", 232),
+    )
+
+    // 100 öncelikli ulusal/yerel yayın ve yukarıdaki doğrulanmış TV Garden yayınları.
     private val channels = listOf(
         TvChannel(
             id = "TRT1.tr@SD",
@@ -81,7 +200,7 @@ class TurkiyeTVProvider : MainAPI() {
             id = "Genel_ShowTV",
             name = "Show TV",
             streamUrl = "https://ciner.daioncdn.net/showtv/showtv.m3u8?app=showtv_web",
-            logoUrl = "https://upload.wikimedia.org/wikipedia/commons/f/f1/Logo_of_Show_TV.png",
+            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/show-tr.png",
             group = "Genel",
             channelNumber = 4,
         ),
@@ -110,6 +229,14 @@ class TurkiyeTVProvider : MainAPI() {
             channelNumber = 7,
         ),
         TvChannel(
+            id = "TV360.tr@SD",
+            name = "360",
+            streamUrl = "https://turkmedya-live.ercdn.net/tv360/tv360.m3u8",
+            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/360-tr.png",
+            group = "Genel",
+            channelNumber = 8,
+        ),
+        TvChannel(
             id = "Teve2.tr@SD",
             name = "Teve2",
             streamUrl = TEVE2_STREAM_URL,
@@ -121,7 +248,7 @@ class TurkiyeTVProvider : MainAPI() {
             id = "TRTHaber.tr@SD",
             name = "TRT Haber",
             streamUrl = "https://tv-trthaber.medya.trt.com.tr/master.m3u8",
-            logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/TRT_Haber_Eyl%C3%BCl_2020_Logo.svg/960px-TRT_Haber_Eyl%C3%BCl_2020_Logo.svg.png",
+            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/trt-haber-tr.png",
             group = "Haber",
             channelNumber = 8,
         ),
@@ -257,7 +384,7 @@ class TurkiyeTVProvider : MainAPI() {
             id = "TRTBelgesel.tr@SD",
             name = "TRT Belgesel",
             streamUrl = "https://tv-trtbelgesel.medya.trt.com.tr/master.m3u8",
-            logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/TRT_Belgesel_logo_%282019-%29.svg/960px-TRT_Belgesel_logo_%282019-%29.svg.png",
+            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/trt-belgesel-tr.png",
             group = "Belgesel",
             channelNumber = 25,
         ),
@@ -505,7 +632,7 @@ class TurkiyeTVProvider : MainAPI() {
             id = "GZT.tr@SD",
             name = "GZT",
             streamUrl = "https://gzttv-live.lg.mncdn.com/gzttv/gzttv/playlist.m3u8",
-            logoUrl = "https://upload.wikimedia.org/wikipedia/commons/e/ef/GZT_logo.svg",
+            logoUrl = FALLBACK_LOGO,
             group = "Belgesel / Dizi",
             channelNumber = 56,
         ),
@@ -845,13 +972,36 @@ class TurkiyeTVProvider : MainAPI() {
             group = "Genel",
             channelNumber = 98,
         ),
+    ) + tvGardenChannels + youtubeChannels
+
+    private val popularNewsOrder = listOf(
+        "CNN TÜRK",
+        "SÖZCÜ TV",
+        "Haber Türk",
+        "TRT Haber",
+        "Haber Global",
+        "Bloomberg HT",
+        "TGRT Haber",
+        "A Haber",
+        "Halk TV",
+        "TV 24",
+        "KRT TV",
+        "TV 100",
+        "Ulusal Kanal",
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val categorizedChannels = when (request.data) {
-            "featured" -> channels.take(12)
-            "general" -> channels.filter { it.group == "Genel" && it.channelNumber <= 32 }
-            "news" -> channels.filter { it.group == "Haber" }
+            // Her yayın tam olarak bir kategoriye düşer; ayrı bir "Öne Çıkanlar"
+            // satırı olmadığı için aynı kanal ikinci kez gösterilmez.
+            "general" -> channels.filter {
+                it.group == "Genel" && (it.channelNumber <= 32 || it.id == "Teve2.tr@SD")
+            }
+            "news" -> channels.filter { it.group == "Haber" }.sortedBy {
+                popularNewsOrder.indexOf(it.name).let { index ->
+                    if (index == -1) Int.MAX_VALUE else index
+                }
+            }
             "sports" -> channels.filter { it.group == "Spor" }
             "music" -> channels.filter { it.group == "Müzik" }
             "kids" -> channels.filter { it.group == "Çocuk" || it.group == "Eğitim" }
@@ -862,8 +1012,10 @@ class TurkiyeTVProvider : MainAPI() {
             "entertainment" -> channels.filter {
                 it.group == "Eğlence" || it.group == "Yaşam" || it.group == "İş / Dizi"
             }
+            "youtube" -> channels.filter { it.group == "Dizi / YouTube" }
             "local" -> channels.filter {
-                (it.group == "Genel" && it.channelNumber > 32) || it.group !in knownCategoryGroups
+                (it.group == "Genel" && it.channelNumber > 32 && it.id != "Teve2.tr@SD") ||
+                    it.group == "Yerel"
             }
             else -> emptyList()
         }
@@ -885,6 +1037,8 @@ class TurkiyeTVProvider : MainAPI() {
         "Eğlence",
         "Yaşam",
         "İş / Dizi",
+        "Dizi / YouTube",
+        "Yerel",
     )
 
     override suspend fun search(query: String): List<SearchResponse> {
@@ -913,6 +1067,10 @@ class TurkiyeTVProvider : MainAPI() {
         subtitleCallback: (com.lagradost.cloudstream3.SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
+        if (isYouTubeUrl(data)) {
+            return loadExtractor(data, subtitleCallback, callback)
+        }
+
         if (data.substringBefore("?").substringBefore("#") == TEVE2_STREAM_URL) {
             return resolveTeve2Stream(callback)
         }
@@ -970,7 +1128,7 @@ class TurkiyeTVProvider : MainAPI() {
     }.getOrDefault(false)
 
     private fun TvChannel.toSearchResponse() = newLiveSearchResponse(
-        name = "$channelNumber. $name",
+        name = name,
         url = streamUrl,
         type = TvType.Live,
         fix = false,
@@ -978,4 +1136,10 @@ class TurkiyeTVProvider : MainAPI() {
         posterUrl = logoUrl
         lang = "tr"
     }
+
+    private fun isYouTubeUrl(url: String): Boolean =
+        url.startsWith("https://www.youtube.com/") ||
+            url.startsWith("https://youtube.com/") ||
+            url.startsWith("https://www.youtube-nocookie.com/") ||
+            url.startsWith("https://youtu.be/")
 }

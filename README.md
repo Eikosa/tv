@@ -1,6 +1,6 @@
 # Türkiye Türkçe Canlı TV — CloudStream ve M3U kullanım rehberi
 
-Bu depo, herkese açık Türkçe/Türkiye canlı HLS yayınlarını tek bir listede toplar. CloudStream sağlayıcısı 99, statik M3U listesi ise 98 kanal içerir. Popüler ulusal ve haber kanalları listede önde; daha az kullanılan müzik, eğitim ve yerel kanallar daha sonra gelir.
+Bu depo, herkese açık Türkçe/Türkiye canlı HLS ve doğrulanmış YouTube yayınlarını tek bir listede toplar. CloudStream sağlayıcısı 183, statik M3U listesi ise 150 yayın içerir. Popüler ulusal ve haber kanalları önde; daha az kullanılan müzik, eğitim ve yerel kanallar daha sonra gelir. CloudStream kanal adlarının başında sıra numarası gösterilmez ve her yayın yalnızca tek bir kategoride yer alır.
 
 ## Hızlı bağlantılar
 
@@ -20,6 +20,8 @@ Bu depo, herkese açık Türkçe/Türkiye canlı HLS yayınlarını tek bir list
 GitHub Actions, `main` dalındaki değişikliklerden sonra `builds` dalında `.cs3` ve `plugins.json` dosyalarını otomatik üretir. İlk kurulumda workflow'un tamamlanmasını bekleyin; sonrasında depo adresini ekleyin. Eklentiyi doğrudan `.cs3` dosyasını indirerek elle kurmak da mümkündür.
 
 Teve2, her oynatmada geçici oturum bilgisi (`sid` ve `_dix` çerezi) istediği için yalnızca CloudStream sağlayıcısında runtime olarak çözülür; statik M3U listesine çalışmayacak bir Teve2 satırı eklenmez.
+
+CloudStream sağlayıcısında YouTube yayınları için CloudStream'in yerleşik `YoutubeExtractor` bileşeni kullanılır. CNN TÜRK, SÖZCÜ TV, Bloomberg HT, Cartoon Network içerikleri ve doğrulanmış dizi/film yayınları bu yolla açılır. YouTube yayınları doğrudan M3U'ya eklenmez; çoğu M3U oynatıcı YouTube izleme sayfası adreslerini medya akışı olarak açamaz.
 
 ## M3U destekleyen IPTV uygulamaları
 
@@ -65,7 +67,7 @@ Windows'ta kaynak projeyi derlemek için:
 gradlew.bat TurkiyeTV:make makePluginsJson
 ```
 
-Yeni kaynak eklerken HTTPS, doğrudan `.m3u8` HLS URL'si, çalışan bir logo ve mümkünse doğru EPG `tvg-id` kullanın. Yayın kontrolünde yalnızca HTTP durum koduna güvenmeyin; yanıtın `#EXTM3U` veya `#EXT-X-` playlist içeriği verdiğini de kontrol edin. Logo adresi HTTP 2xx ve görsel içerik döndürmelidir. Kanal sıralaması `TurkiyeTVProvider.kt` ve M3U dosyasında aynı tutulmalıdır.
+Yeni kaynak eklerken HTTPS, doğrudan `.m3u8` HLS URL'si, çalışan bir logo ve mümkünse doğru EPG `tvg-id` kullanın. Yayın kontrolünde yalnızca HTTP durum koduna güvenmeyin; yanıtın `#EXTM3U` veya `#EXT-X-` playlist içeriği verdiğini de kontrol edin. Logo adresi HTTP 2xx ve görsel içerik döndürmelidir. TV Garden'ın güncel Türkiye verisindeki yayınlar bu kontrollerden geçirilerek eklenmiştir; erişilemeyen kaynaklar eklenmemiştir.
 
 ## Kullanım ve yasal not
 
