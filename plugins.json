@@ -1,9 +1,9 @@
 [
     {
-        "fileHash": "sha256-43ffa00b623716732e51f2c80891f2f1464da03a2664728ecf1d1c715dcd861c",
+        "fileHash": "sha256-65aae3ea40f3da28f2f0c9c03fb083dd00afc574c3af720a5cfc773c28a3a634",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Eikosa/tv",
-        "fileSize": 32192,
+        "fileSize": 32152,
         "status": 1,
         "authors": [
             "Eikosa"
