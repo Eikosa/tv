@@ -6,14 +6,14 @@ Bu depo, herkese açık Türkçe/Türkiye canlı HLS yayınlarını tek bir list
 
 - M3U: `https://raw.githubusercontent.com/Eikosa/tv/main/turkiye_ulusal_tv.m3u`
 - EPG/XMLTV: `https://iptv-epg.org/files/epg-tr.xml`
-- CloudStream depo adresi (bunu ekleyin): `https://raw.githubusercontent.com/Eikosa/tv/main/repo.json`
+- CloudStream depo adresi (bunu ekleyin): `https://raw.githubusercontent.com/Eikosa/tv/refs/heads/main/repo.json`
 - CloudStream plugin listesi: `https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json`
 - CloudStream eklentisi: `https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3`
 
 ## CloudStream kullanımı
 
 1. CloudStream'i açıp eklenti/depo yönetimine girin.
-2. Yukarıdaki `main/repo.json` adresini depo adresi olarak ekleyin. `plugins.json` doğrudan plugin listesidir; depo adresi olarak `repo.json` kullanılmalıdır.
+2. Yukarıdaki `refs/heads/main/repo.json` adresini depo adresi olarak ekleyin. `plugins.json` doğrudan plugin listesidir; depo adresi olarak `repo.json` kullanılmalıdır.
 3. `TurkiyeTV` eklentisini kurun veya güncelleyin.
 4. Canlı içerikler bölümünden kanalı seçin; arama kutusuyla kanal adına göre arayın.
 
