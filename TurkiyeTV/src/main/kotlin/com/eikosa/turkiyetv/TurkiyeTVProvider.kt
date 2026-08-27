@@ -101,6 +101,14 @@ class TurkiyeTVProvider : MainAPI() {
             channelNumber = 7,
         ),
         TvChannel(
+            id = "Teve2.tr@SD",
+            name = "Teve2",
+            streamUrl = TEVE2_STREAM_URL,
+            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/teve2-tr.png",
+            group = "Genel",
+            channelNumber = 99,
+        ),
+        TvChannel(
             id = "TRTHaber.tr@SD",
             name = "TRT Haber",
             streamUrl = "https://tv-trthaber.medya.trt.com.tr/master.m3u8",
@@ -827,14 +835,6 @@ class TurkiyeTVProvider : MainAPI() {
             logoUrl = "https://i.imgur.com/rTBX6lS.png",
             group = "Genel",
             channelNumber = 98,
-        ),
-        TvChannel(
-            id = "Teve2.tr@SD",
-            name = "Teve2",
-            streamUrl = TEVE2_STREAM_URL,
-            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/teve2-tr.png",
-            group = "Genel",
-            channelNumber = 99,
         ),
     )
 
