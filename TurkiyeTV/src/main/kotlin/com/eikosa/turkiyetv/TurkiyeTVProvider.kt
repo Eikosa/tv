@@ -149,7 +149,6 @@ class TurkiyeTVProvider : MainAPI() {
         youtubeChannel("APara", "A Para", "Fas1VhgP8Uk", "Haber", 204),
         youtubeChannel("Benguturk", "Bengütürk TV", "MOhcWsOL1Us", "Haber", 205),
         youtubeChannel("KRT", "KRT TV", "_k0wG2Qah1g", "Haber", 206),
-        youtubeChannel("LiderHaber", "Lider Haber", "8nt4AKdiMqM", "Haber", 207),
         youtubeChannel("TV100", "TV 100", "4WSvLRk83-c", "Haber", 208),
         youtubeChannel("UlusalKanal", "Ulusal Kanal", "Gcxkjxhbhk8", "Haber", 209),
         youtubeChannel("BeINSports", "beIN SPORTS Türkiye", "i7UpPgxfZZ8", "Spor", 210),
