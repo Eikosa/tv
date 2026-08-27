@@ -848,7 +848,7 @@ class TurkiyeTVProvider : MainAPI() {
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val categorizedChannels = when (request.name) {
+        val categorizedChannels = when (request.data) {
             "featured" -> channels.take(12)
             "general" -> channels.filter { it.group == "Genel" && it.channelNumber <= 32 }
             "news" -> channels.filter { it.group == "Haber" }
