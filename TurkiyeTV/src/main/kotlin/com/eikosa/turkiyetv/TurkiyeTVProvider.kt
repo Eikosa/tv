@@ -38,7 +38,16 @@ class TurkiyeTVProvider : MainAPI() {
     override val supportedTypes = setOf(TvType.Live)
     override val hasMainPage = true
     override val mainPage = listOf(
-        com.lagradost.cloudstream3.mainPage("all", "Türkçe Canlı Kanallar")
+        com.lagradost.cloudstream3.mainPage("featured", "Öne Çıkanlar"),
+        com.lagradost.cloudstream3.mainPage("general", "Genel / Ulusal"),
+        com.lagradost.cloudstream3.mainPage("news", "Haber"),
+        com.lagradost.cloudstream3.mainPage("sports", "Spor"),
+        com.lagradost.cloudstream3.mainPage("music", "Müzik"),
+        com.lagradost.cloudstream3.mainPage("kids", "Çocuk / Eğitim"),
+        com.lagradost.cloudstream3.mainPage("culture", "Belgesel / Kültür"),
+        com.lagradost.cloudstream3.mainPage("religion", "Dini"),
+        com.lagradost.cloudstream3.mainPage("entertainment", "Eğlence / Yaşam"),
+        com.lagradost.cloudstream3.mainPage("local", "Yerel / Diğer"),
     )
 
     // Popüler ulusal ve haber kanalları önce, daha nadir/yerel kanallar sonra listelenir.
@@ -839,9 +848,44 @@ class TurkiyeTVProvider : MainAPI() {
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val items = channels.map { it.toSearchResponse() }
+        val categorizedChannels = when (request.name) {
+            "featured" -> channels.take(12)
+            "general" -> channels.filter { it.group == "Genel" && it.channelNumber <= 32 }
+            "news" -> channels.filter { it.group == "Haber" }
+            "sports" -> channels.filter { it.group == "Spor" }
+            "music" -> channels.filter { it.group == "Müzik" }
+            "kids" -> channels.filter { it.group == "Çocuk" || it.group == "Eğitim" }
+            "culture" -> channels.filter {
+                it.group.startsWith("Belgesel") || it.group.startsWith("Kültür")
+            }
+            "religion" -> channels.filter { it.group == "Dini" }
+            "entertainment" -> channels.filter {
+                it.group == "Eğlence" || it.group == "Yaşam" || it.group == "İş / Dizi"
+            }
+            "local" -> channels.filter {
+                (it.group == "Genel" && it.channelNumber > 32) || it.group !in knownCategoryGroups
+            }
+            else -> emptyList()
+        }
+        val items = categorizedChannels.map { it.toSearchResponse() }
         return newHomePageResponse(request.name, items, false)
     }
+
+    private val knownCategoryGroups = setOf(
+        "Genel",
+        "Haber",
+        "Spor",
+        "Müzik",
+        "Çocuk",
+        "Eğitim",
+        "Belgesel",
+        "Belgesel / Dizi",
+        "Kültür / Genel",
+        "Dini",
+        "Eğlence",
+        "Yaşam",
+        "İş / Dizi",
+    )
 
     override suspend fun search(query: String): List<SearchResponse> {
         val normalizedQuery = query.trim().lowercase()
