@@ -1,5 +1,6 @@
 package com.eikosa.turkiyetv
 
+import com.lagradost.cloudstream3.app
 import com.lagradost.cloudstream3.HomePageResponse
 import com.lagradost.cloudstream3.MainAPI
 import com.lagradost.cloudstream3.MainPageRequest
@@ -22,6 +23,14 @@ private data class TvChannel(
     val channelNumber: Int,
 )
 
+private const val TEVE2_STREAM_URL = "https://demiroren.daioncdn.net/teve2/teve2_360p.m3u8"
+private const val TEVE2_REFERER = "https://www.tv2.com.tr/"
+private const val TEVE2_ORIGIN = "https://www.tv2.com.tr"
+private const val TEVE2_APP_ID = "6aab838a-437e-4a1b-bbd0-e30f79cdbbbd"
+private const val TEVE2_SID_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789"
+private const val TEVE2_USER_AGENT =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+
 class TurkiyeTVProvider : MainAPI() {
     override var mainUrl = "https://github.com/Eikosa/tv"
     override var name = "Türkiye Türkçe Canlı TV"
@@ -33,7 +42,7 @@ class TurkiyeTVProvider : MainAPI() {
     )
 
     // Popüler ulusal ve haber kanalları önce, daha nadir/yerel kanallar sonra listelenir.
-    // 98 yayın ve logo adresi 27 Ağustos 2026 tarihinde erişim testiyle doğrulandı.
+    // 98 statik yayın ve logo adresi 27 Ağustos 2026 tarihinde erişim testiyle doğrulandı.
     private val channels = listOf(
         TvChannel(
             id = "TRT1.tr@SD",
@@ -819,6 +828,14 @@ class TurkiyeTVProvider : MainAPI() {
             group = "Genel",
             channelNumber = 98,
         ),
+        TvChannel(
+            id = "Teve2.tr@SD",
+            name = "Teve2",
+            streamUrl = TEVE2_STREAM_URL,
+            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/teve2-tr.png",
+            group = "Genel",
+            channelNumber = 99,
+        ),
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
@@ -852,6 +869,10 @@ class TurkiyeTVProvider : MainAPI() {
         subtitleCallback: (com.lagradost.cloudstream3.SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
+        if (data.substringBefore("?").substringBefore("#") == TEVE2_STREAM_URL) {
+            return resolveTeve2Stream(callback)
+        }
+
         val streamPath = data.substringBefore("?").substringBefore("#")
         if (!data.startsWith("https://") || !streamPath.endsWith(".m3u8")) return false
 
@@ -861,6 +882,48 @@ class TurkiyeTVProvider : MainAPI() {
         })
         return true
     }
+
+    private fun generateTeve2Sid(): String = buildString(12) {
+        repeat(12) {
+            append(TEVE2_SID_ALPHABET.random())
+        }
+    }
+
+    private suspend fun resolveTeve2Stream(callback: (ExtractorLink) -> Unit): Boolean = runCatching {
+        val dynamicUrl = "$TEVE2_STREAM_URL?sid=${generateTeve2Sid()}&app=$TEVE2_APP_ID&ce=3"
+        val response = app.get(
+            dynamicUrl,
+            headers = mapOf(
+                "Origin" to TEVE2_ORIGIN,
+                "User-Agent" to TEVE2_USER_AGENT,
+            ),
+            referer = TEVE2_REFERER,
+        )
+
+        if (!response.isSuccessful || !response.text.contains("#EXTM3U")) return@runCatching false
+
+        val cookieHeader = response.headers.values("Set-Cookie").joinToString(";")
+        val dix = Regex("(?:^|;\\s*)_dix=([^;]+)").find(cookieHeader)?.groupValues?.get(1)
+            ?: return@runCatching false
+
+        callback(
+            newExtractorLink(
+                source = name,
+                name = "Teve2 • HLS",
+                url = dynamicUrl,
+                type = ExtractorLinkType.M3U8,
+            ) {
+                referer = TEVE2_REFERER
+                quality = 360
+                headers = mapOf(
+                    "Origin" to TEVE2_ORIGIN,
+                    "User-Agent" to TEVE2_USER_AGENT,
+                    "Cookie" to "_dix=$dix",
+                )
+            },
+        )
+        true
+    }.getOrDefault(false)
 
     private fun TvChannel.toSearchResponse() = newLiveSearchResponse(
         name = "$channelNumber. $name",

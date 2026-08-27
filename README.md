@@ -1,6 +1,6 @@
 # Türkiye Türkçe Canlı TV — CloudStream ve M3U kullanım rehberi
 
-Bu depo, herkese açık Türkçe/Türkiye canlı HLS yayınlarını tek bir listede toplar. Şu an 98 kanal içerir. Popüler ulusal ve haber kanalları listede önde; daha az kullanılan müzik, eğitim ve yerel kanallar daha sonra gelir.
+Bu depo, herkese açık Türkçe/Türkiye canlı HLS yayınlarını tek bir listede toplar. CloudStream sağlayıcısı 99, statik M3U listesi ise 98 kanal içerir. Popüler ulusal ve haber kanalları listede önde; daha az kullanılan müzik, eğitim ve yerel kanallar daha sonra gelir.
 
 ## Hızlı bağlantılar
 
@@ -18,6 +18,8 @@ Bu depo, herkese açık Türkçe/Türkiye canlı HLS yayınlarını tek bir list
 4. Canlı içerikler bölümünden kanalı seçin; arama kutusuyla kanal adına göre arayın.
 
 GitHub Actions, `main` dalındaki değişikliklerden sonra `builds` dalında `.cs3` ve `plugins.json` dosyalarını otomatik üretir. İlk kurulumda workflow'un tamamlanmasını bekleyin; sonrasında depo adresini ekleyin. Eklentiyi doğrudan `.cs3` dosyasını indirerek elle kurmak da mümkündür.
+
+Teve2, her oynatmada geçici oturum bilgisi (`sid` ve `_dix` çerezi) istediği için yalnızca CloudStream sağlayıcısında runtime olarak çözülür; statik M3U listesine çalışmayacak bir Teve2 satırı eklenmez.
 
 ## M3U destekleyen IPTV uygulamaları
 
