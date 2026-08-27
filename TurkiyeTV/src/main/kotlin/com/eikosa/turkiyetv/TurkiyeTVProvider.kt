@@ -743,7 +743,7 @@ class TurkiyeTVProvider : MainAPI() {
             id = "TRTKurdi.tr@SD",
             name = "TRT Kurdî",
             streamUrl = "https://tv-trtkurdi.medya.trt.com.tr/master.m3u8",
-            logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/TRT_Kurd%C3%AE_logo.svg/960px-TRT_Kurd%C3%AE_logo.svg.png",
+            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/trt-kurdi-tr.png",
             group = "Genel",
             channelNumber = 89,
         ),
