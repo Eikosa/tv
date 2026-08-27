@@ -14,6 +14,8 @@ import com.lagradost.cloudstream3.utils.ExtractorLinkType
 import com.lagradost.cloudstream3.utils.Qualities
 import com.lagradost.cloudstream3.utils.loadExtractor
 import com.lagradost.cloudstream3.utils.newExtractorLink
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 
 private data class TvChannel(
     val id: String,
@@ -31,6 +33,10 @@ private const val TEVE2_APP_ID = "6aab838a-437e-4a1b-bbd0-e30f79cdbbbd"
 private const val TEVE2_SID_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789"
 private const val TEVE2_USER_AGENT =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+private const val YOUTUBE_USER_AGENT =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+private const val YOUTUBE_ANDROID_USER_AGENT =
+    "com.google.android.youtube/20.10.38 (Linux; U; Android 14)"
 private const val FALLBACK_LOGO =
     "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png"
 
@@ -133,8 +139,9 @@ class TurkiyeTVProvider : MainAPI() {
         tvGardenChannel("TVGarden_TYTTurk", "TYT Türk", "https://tytturk-live.ercdn.net/tytturk/tytturk.m3u8", "Genel", 152),
     )
 
-    // TV Garden ve kullanıcı tarafından verilen, oEmbed ile doğrulanan YouTube yayınları.
-    // Oynatma CloudStream'in yerleşik YoutubeExtractor'ı üzerinden yapılır.
+    // TV Garden ve kullanıcı tarafından verilen YouTube yayınları.
+    // Canlı oynatma önce Android istemcili HLS çözümüyle, sonra yerleşik
+    // CloudStream YoutubeExtractor'ıyla denenir.
     private val youtubeChannels = listOf(
         youtubeChannel("CNNTurk", "CNN TÜRK", "6N8_r2uwLEc", "Haber", 201),
         youtubeChannel("SozcuTV", "SÖZCÜ TV", "ztmY_cCtUl0", "Haber", 202),
@@ -1068,7 +1075,19 @@ class TurkiyeTVProvider : MainAPI() {
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
         if (isYouTubeUrl(data)) {
-            return loadExtractor(data, subtitleCallback, callback)
+            // Bazı CloudStream/NewPipe sürümleri canlı yayında loadExtractor'dan
+            // true döndürüp hiç link üretmeyebiliyor. Önce doğrudan YouTube'un
+            // canlı HLS manifestini almayı deniyoruz; olmazsa yerleşik çözücülere
+            // geri dönüyoruz.
+            if (resolveYouTubeLive(data, callback)) return true
+
+            var extracted = false
+            val trackingCallback: (ExtractorLink) -> Unit = { link ->
+                extracted = true
+                callback(link)
+            }
+            runCatching { loadExtractor(data, subtitleCallback, trackingCallback) }
+            return extracted
         }
 
         if (data.substringBefore("?").substringBefore("#") == TEVE2_STREAM_URL) {
@@ -1084,6 +1103,86 @@ class TurkiyeTVProvider : MainAPI() {
         })
         return true
     }
+
+    /**
+     * YouTube canlı yayınları için CloudStream sürümünden bağımsız HLS çözümü.
+     * Watch sayfasındaki güncel player yapılandırmasını kullanır; sabit ve
+     * çabuk eskiyen bir API anahtarına güvenmez.
+     */
+    private suspend fun resolveYouTubeLive(
+        data: String,
+        callback: (ExtractorLink) -> Unit,
+    ): Boolean = runCatching {
+        val videoId = Regex(
+            "(?:youtu\\.be/|youtube(?:-nocookie)?\\.com/(?:.*v=|v/|u/\\w/|embed/|shorts/|live/))([\\w-]{11})",
+        ).find(data)?.groupValues?.get(1) ?: return@runCatching false
+
+        val requestHeaders = mapOf(
+            "User-Agent" to YOUTUBE_USER_AGENT,
+            "Accept-Language" to "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+        )
+        val page = app.get(
+            "https://www.youtube.com/watch?v=$videoId",
+            headers = requestHeaders,
+            referer = "https://www.youtube.com/",
+        )
+        if (!page.isSuccessful) return@runCatching false
+
+        val pageText = page.text
+        val apiKey = Regex("\\\"INNERTUBE_API_KEY\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"")
+            .find(pageText)?.groupValues?.get(1) ?: return@runCatching false
+
+        val body = """
+            {
+              "context": {
+                "client": {
+                  "hl": "tr",
+                  "gl": "TR",
+                  "clientName": "ANDROID",
+                  "clientVersion": "20.10.38"
+                }
+              },
+              "videoId": "$videoId",
+              "playbackContext": {
+                "contentPlaybackContext": {
+                  "html5Preference": "HTML5_PREF_WANTS"
+                }
+              }
+            }
+        """.trimIndent().toRequestBody("application/json; charset=utf-8".toMediaType())
+
+        val player = app.post(
+            "https://www.youtube.com/youtubei/v1/player?key=$apiKey",
+            headers = mapOf(
+                "User-Agent" to YOUTUBE_ANDROID_USER_AGENT,
+                "Accept-Language" to "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+                "Content-Type" to "application/json",
+            ),
+            requestBody = body,
+            referer = "https://www.youtube.com/",
+        )
+        if (!player.isSuccessful) return@runCatching false
+
+        val hlsUrl = Regex("\\\"hlsManifestUrl\\\"\\s*:\\s*\\\"([^\\\"]+)\\\"")
+            .find(player.text)?.groupValues?.get(1)
+            ?.replace("\\u0026", "&")
+            ?.replace("\\/", "/")
+            ?: return@runCatching false
+
+        callback(
+            newExtractorLink(
+                source = name,
+                name = "YouTube Live • HLS",
+                url = hlsUrl,
+                type = ExtractorLinkType.M3U8,
+            ) {
+                referer = "https://www.youtube.com/"
+                quality = Qualities.Unknown.value
+                headers = mapOf("User-Agent" to YOUTUBE_ANDROID_USER_AGENT)
+            },
+        )
+        true
+    }.getOrDefault(false)
 
     private fun generateTeve2Sid(): String = buildString(12) {
         repeat(12) {
