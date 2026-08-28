@@ -40,11 +40,22 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Build plugin
+        shell: bash
         run: |
           chmod +x gradlew
-          ./gradlew make makePluginsJson
-          cp TurkiyeTV/build/*.cs3 builds/
-          cp build/plugins.json builds/
+          for attempt in 1 2 3; do
+            echo "Gradle build attempt $attempt/3"
+            if ./gradlew make makePluginsJson --no-daemon; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              delay=$((attempt * 20))
+              echo "Gradle failed; retrying in $delay seconds..."
+              sleep "$delay"
+            fi
+          done
+          echo "Gradle build failed after 3 attempts."
+          exit 1
 
       - name: Publish builds branch
         shell: bash
