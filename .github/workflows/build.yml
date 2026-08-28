@@ -46,6 +46,8 @@ jobs:
           for attempt in 1 2 3; do
             echo "Gradle build attempt $attempt/3"
             if ./gradlew make makePluginsJson --no-daemon; then
+              cp TurkiyeTV/build/*.cs3 builds/
+              cp build/plugins.json builds/
               exit 0
             fi
             if [ "$attempt" -lt 3 ]; then
