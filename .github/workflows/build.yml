@@ -46,8 +46,6 @@ jobs:
           for attempt in 1 2 3; do
             echo "Gradle build attempt $attempt/3"
             if ./gradlew make makePluginsJson --no-daemon; then
-              cp TurkiyeTV/build/*.cs3 builds/
-              cp build/plugins.json builds/
               exit 0
             fi
             if [ "$attempt" -lt 3 ]; then
@@ -59,9 +57,70 @@ jobs:
           echo "Gradle build failed after 3 attempts."
           exit 1
 
+      - name: Validate CloudStream package
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import zipfile
+          from pathlib import Path
+
+          package = Path("TurkiyeTV/build/TurkiyeTV.cs3")
+          generated = Path("build/plugins.json")
+
+          if not package.is_file() or package.stat().st_size == 0:
+              raise SystemExit("VALIDATION FAILED: TurkiyeTV.cs3 yok veya boş.")
+
+          entries = json.loads(generated.read_text(encoding="utf-8"))
+          if not isinstance(entries, list) or len(entries) != 1:
+              raise SystemExit("VALIDATION FAILED: build/plugins.json tek plugin kaydı içermiyor.")
+
+          entry = entries[0]
+          data = package.read_bytes()
+          actual_hash = hashlib.sha256(data).hexdigest()
+          expected_hash = str(entry.get("fileHash", "")).removeprefix("sha256-")
+
+          if expected_hash != actual_hash:
+              raise SystemExit("VALIDATION FAILED: plugins.json SHA-256 paketi eşleşmiyor.")
+          if int(entry.get("fileSize", -1)) != len(data):
+              raise SystemExit("VALIDATION FAILED: plugins.json dosya boyutu paketi eşleşmiyor.")
+          if entry.get("internalName") != "TurkiyeTV":
+              raise SystemExit("VALIDATION FAILED: internalName TurkiyeTV değil.")
+          if int(entry.get("version", -1)) != 4:
+              raise SystemExit(f"VALIDATION FAILED: beklenmeyen plugin sürümü: {entry.get('version')}.")
+
+          with zipfile.ZipFile(package) as archive:
+              bad_file = archive.testzip()
+              if bad_file is not None:
+                  raise SystemExit(f"VALIDATION FAILED: ZIP bozuk: {bad_file}")
+              names = set(archive.namelist())
+              required = {"manifest.json", "classes.dex"}
+              missing = required - names
+              if missing:
+                  raise SystemExit(f"VALIDATION FAILED: pakette eksik dosya: {sorted(missing)}")
+              manifest = json.loads(archive.read("manifest.json"))
+
+          if manifest.get("pluginClassName") != "com.eikosa.turkiyetv.TurkiyeTVPlugin":
+              raise SystemExit("VALIDATION FAILED: manifest pluginClassName yanlış.")
+          if int(manifest.get("version", -1)) != int(entry["version"]):
+              raise SystemExit("VALIDATION FAILED: manifest ve katalog sürümü farklı.")
+          if manifest.get("name") != entry.get("name"):
+              raise SystemExit("VALIDATION FAILED: manifest ve katalog adı farklı.")
+
+          expected_url = "https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3"
+          if entry.get("url") != expected_url:
+              raise SystemExit("VALIDATION FAILED: katalog plugin URL'si yanlış.")
+
+          print(f"VALIDATION PASSED: {package} | {len(data)} bytes | sha256-{actual_hash}")
+
+          PY
+
       - name: Publish builds branch
         shell: bash
         run: |
+          cp TurkiyeTV/build/*.cs3 builds/
+          cp build/plugins.json builds/
           cd builds
           git init
           git config user.name "github-actions[bot]"
