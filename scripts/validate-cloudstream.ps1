@@ -5,6 +5,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$expectedVersion = 5
 $repoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $repoRoot
 
@@ -47,7 +48,7 @@ $packageSize = $packageBytes.Length
 $generatedEntry = ((Get-Content $generatedListPath -Raw) | ConvertFrom-Json)[0]
 Assert-Condition ($generatedEntry.fileHash -eq "sha256-$packageHash") "build/plugins.json hash bilgisi paketle eşleşmiyor."
 Assert-Condition ([int64]$generatedEntry.fileSize -eq $packageSize) "build/plugins.json boyutu paketle eşleşmiyor."
-Assert-Condition ([int]$generatedEntry.version -eq 4) "Beklenmeyen plugin sürümü: $($generatedEntry.version)."
+Assert-Condition ([int]$generatedEntry.version -eq $expectedVersion) "Beklenmeyen plugin sürümü: $($generatedEntry.version)."
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $archive = [IO.Compression.ZipFile]::OpenRead($packagePath)
@@ -122,7 +123,7 @@ if ($CheckRemote) {
     $remoteHash = ([BitConverter]::ToString([Security.Cryptography.SHA256]::Create().ComputeHash($remoteData))).Replace("-", "").ToLowerInvariant()
     Assert-Condition ($remoteHash -eq $remoteMeta.fileHash.Replace("sha256-", "")) "GitHub paketi ile metadata hash'i eşleşmiyor."
     Assert-Condition ($remoteData.Length -eq [int64]$remoteMeta.fileSize) "GitHub paketi ile metadata boyutu eşleşmiyor."
-    Assert-Condition ([int]$remoteMeta.version -eq 4) "GitHub'daki plugin sürümü beklenenden farklı."
+    Assert-Condition ([int]$remoteMeta.version -eq $expectedVersion) "GitHub'daki plugin sürümü beklenenden farklı."
 } else {
     Write-Host "[6/6] Uzak GitHub kontrolü atlandı (-CheckRemote verilmedi)."
 }
