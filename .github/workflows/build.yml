@@ -87,7 +87,7 @@ jobs:
               raise SystemExit("VALIDATION FAILED: plugins.json dosya boyutu paketi eşleşmiyor.")
           if entry.get("internalName") != "TurkiyeTV":
               raise SystemExit("VALIDATION FAILED: internalName TurkiyeTV değil.")
-          if int(entry.get("version", -1)) != 4:
+          if int(entry.get("version", -1)) != 5:
               raise SystemExit(f"VALIDATION FAILED: beklenmeyen plugin sürümü: {entry.get('version')}.")
 
           with zipfile.ZipFile(package) as archive:
