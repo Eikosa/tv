@@ -115,7 +115,7 @@ https://api-tv3.yayin.com.tr/postatv/postatv/playlist.m3u8
 #EXTINF:-1 tvg-chno="37" tvg-id="AltasTV.tr@SD" tvg-name="Altas TV" tvg-logo="https://i.imgur.com/XaJ7fp6.png" group-title="Genel",Altas TV
 https://edge1.socialsmart.tv/altastv/bant1/playlist.m3u8
 
-#EXTINF:-1 tvg-chno="38" tvg-id="AnadoluNetTV.tr@SD" tvg-name="Anadolu Net TV" tvg-logo="https://www.anadolunettv.com/d/r/logo.png" group-title="Genel",Anadolu Net TV
+#EXTINF:-1 tvg-chno="38" tvg-id="AnadoluNetTV.tr@SD" tvg-name="Anadolu Net TV" tvg-logo="https://ui-avatars.com/api/?name=Anadolu+Net+TV&background=0f766e&color=fff&size=256&bold=true&format=png" group-title="Genel",Anadolu Net TV
 https://live.artidijitalmedya.com/artidijital_anadolunet/anadolunet/playlist.m3u8
 
 #EXTINF:-1 tvg-chno="39" tvg-id="ATVAlanya.tr@SD" tvg-name="ATV Alanya" tvg-logo="https://i.imgur.com/bUwarR0.png" group-title="Genel",ATV Alanya
@@ -169,7 +169,7 @@ https://edge1.socialsmart.tv/ftvturk/bant1/playlist.m3u8
 #EXTINF:-1 tvg-chno="55" tvg-id="GuneydoguTV.tr@SD" tvg-name="Guneydogu TV" tvg-logo="https://i.imgur.com/JT5pp3Y.png" group-title="Haber",Guneydogu TV
 https://edge1.socialsmart.tv/gtv/bant1/playlist.m3u8
 
-#EXTINF:-1 tvg-chno="56" tvg-id="GZT.tr@SD" tvg-name="GZT" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Belgesel / Dizi",GZT
+#EXTINF:-1 tvg-chno="56" tvg-id="GZT.tr@SD" tvg-name="GZT" tvg-logo="https://ui-avatars.com/api/?name=GZT&background=365314&color=d9f99d&size=256&bold=true&format=png" group-title="Belgesel / Dizi",GZT
 https://gzttv-live.lg.mncdn.com/gzttv/gzttv/playlist.m3u8
 
 #EXTINF:-1 tvg-chno="57" tvg-id="HTSporTV.tr@SD" tvg-name="HTSpor TV" tvg-logo="https://www.htspor.com/images/manifest/social-share-logo.png" group-title="Spor",HTSpor TV
@@ -299,46 +299,46 @@ https://playlist.fasttvcdn.com/pl/rfrk9821hdy9dayo8wfyha/kltr-sanat-tv/playlist.
 https://live.yoltv.com/hls/stream.m3u8
 
 # TV Garden'dan 27 Ağustos 2026 tarihinde HLS playlist yanıtı alınan ek yayınlar
-#EXTINF:-1 tvg-id="TVGarden_ArasTV" tvg-name="Aras TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Aras TV
+#EXTINF:-1 tvg-id="TVGarden_ArasTV" tvg-name="Aras TV" tvg-logo="https://ui-avatars.com/api/?name=ArasTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Aras TV
 https://2.rtmp.org/tv217/yayin.stream/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_ASTV" tvg-name="AS TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",AS TV
+#EXTINF:-1 tvg-id="TVGarden_ASTV" tvg-name="AS TV" tvg-logo="https://ui-avatars.com/api/?name=ASTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",AS TV
 https://live.artidijitalmedya.com/artidijital_astv/astv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_BiKanal" tvg-name="Bi Kanal" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Bi Kanal
+#EXTINF:-1 tvg-id="TVGarden_BiKanal" tvg-name="Bi Kanal" tvg-logo="https://ui-avatars.com/api/?name=BiKanal&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Bi Kanal
 https://bikanal-live.ercdn.net/bikanal/bikanal.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_BodrumKentTV" tvg-name="Bodrum Kent TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Bodrum Kent TV
+#EXTINF:-1 tvg-id="TVGarden_BodrumKentTV" tvg-name="Bodrum Kent TV" tvg-logo="https://ui-avatars.com/api/?name=BodrumKentTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Bodrum Kent TV
 https://edge2.taksimbilisim.com/bodrumkenttv/bant1/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_BRTV" tvg-name="BRTV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/brtv-tr.png" group-title="Yerel",BRTV
 https://live.artidijitalmedya.com/artidijital_brtv/brtv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_Cine1" tvg-name="Cine 1" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="İş / Dizi",Cine 1
+#EXTINF:-1 tvg-id="TVGarden_Cine1" tvg-name="Cine 1" tvg-logo="https://ui-avatars.com/api/?name=Cine1&background=334155&color=fff&size=256&bold=true&format=png" group-title="İş / Dizi",Cine 1
 https://canliyayin.cine1.com.tr/memfs/cbaef080-a742-4644-9e9e-2b9f6a5103c3_output_0.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_DenizPostasi" tvg-name="Deniz Postası TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Haber",Deniz Postası TV
+#EXTINF:-1 tvg-id="TVGarden_DenizPostasi" tvg-name="Deniz Postası TV" tvg-logo="https://ui-avatars.com/api/?name=DenizPostasi&background=334155&color=fff&size=256&bold=true&format=png" group-title="Haber",Deniz Postası TV
 https://live.artidijitalmedya.com/artidijital_denizpostasi/denizpostasi/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_EkolSports" tvg-name="Ekol Sports" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Spor",Ekol Sports
+#EXTINF:-1 tvg-id="TVGarden_EkolSports" tvg-name="Ekol Sports" tvg-logo="https://ui-avatars.com/api/?name=EkolSports&background=334155&color=fff&size=256&bold=true&format=png" group-title="Spor",Ekol Sports
 https://ekoltv-live.ercdn.net/ekolsport/ekolsport.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_EkolTV" tvg-name="Ekol TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Haber",Ekol TV
+#EXTINF:-1 tvg-id="TVGarden_EkolTV" tvg-name="Ekol TV" tvg-logo="https://ui-avatars.com/api/?name=EkolTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Haber",Ekol TV
 https://ekoltv-live.ercdn.net/ekoltv/ekoltv.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_ErciyesTV" tvg-name="Erciyes TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Erciyes TV
+#EXTINF:-1 tvg-id="TVGarden_ErciyesTV" tvg-name="Erciyes TV" tvg-logo="https://ui-avatars.com/api/?name=ErciyesTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Erciyes TV
 https://live.artidijitalmedya.com/artidijital_erciyestv/erciyestv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_ERTV" tvg-name="ERTV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",ERTV
+#EXTINF:-1 tvg-id="TVGarden_ERTV" tvg-name="ERTV" tvg-logo="https://ui-avatars.com/api/?name=ERTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",ERTV
 https://live.artidijitalmedya.com/artidijital_ertv_new/ertv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_Haber61" tvg-name="Haber61 TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Haber",Haber61 TV
+#EXTINF:-1 tvg-id="TVGarden_Haber61" tvg-name="Haber61 TV" tvg-logo="https://ui-avatars.com/api/?name=Haber61&background=334155&color=fff&size=256&bold=true&format=png" group-title="Haber",Haber61 TV
 https://cdn-haber61tv.yayin.com.tr/haber61tv/smil:haber61tv.smil/index.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_HunatTV" tvg-name="Hunat TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Hunat TV
+#EXTINF:-1 tvg-id="TVGarden_HunatTV" tvg-name="Hunat TV" tvg-logo="https://ui-avatars.com/api/?name=HunatTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Hunat TV
 https://live.artidijitalmedya.com/artidijital_hunattv/hunattv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_IcelTV" tvg-name="İçel TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",İçel TV
+#EXTINF:-1 tvg-id="TVGarden_IcelTV" tvg-name="İçel TV" tvg-logo="https://ui-avatars.com/api/?name=IcelTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",İçel TV
 https://edge1.taksimbilisim.com/iceltv/bant1/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_Kanal15" tvg-name="Kanal 15" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-15-tr.png" group-title="Yerel",Kanal 15
@@ -353,7 +353,7 @@ https://live.artidijitalmedya.com/artidijital_kanal3/kanal3/playlist.m3u8
 #EXTINF:-1 tvg-id="TVGarden_Kanal33" tvg-name="Kanal 33" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-33-tr.png" group-title="Yerel",Kanal 33
 https://edge2.taksimbilisim.com/kanal33/bant1/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_Kanal34" tvg-name="Kanal 34" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Kanal 34
+#EXTINF:-1 tvg-id="TVGarden_Kanal34" tvg-name="Kanal 34" tvg-logo="https://ui-avatars.com/api/?name=Kanal34&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Kanal 34
 https://live.euromediacenter.com/kanal34/tracks-v1a1/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_Kanal58" tvg-name="Kanal 58" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-58-tr.png" group-title="Yerel",Kanal 58
@@ -371,19 +371,19 @@ https://tv.kanalb.tr/hls/kanalb/index.m3u8
 #EXTINF:-1 tvg-id="TVGarden_KanalFirat" tvg-name="Kanal Fırat" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-firat-tr.png" group-title="Yerel",Kanal Fırat
 https://live.artidijitalmedya.com/artidijital_kanalfirat/kanalfirat/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_KanalHayat" tvg-name="Kanal Hayat" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Dini",Kanal Hayat
+#EXTINF:-1 tvg-id="TVGarden_KanalHayat" tvg-name="Kanal Hayat" tvg-logo="https://ui-avatars.com/api/?name=KanalHayat&background=334155&color=fff&size=256&bold=true&format=png" group-title="Dini",Kanal Hayat
 https://tbn02a.ltnschedule.com/hls/nx21i.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_KanalPlus" tvg-name="Kanal Plus" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Kanal Plus
+#EXTINF:-1 tvg-id="TVGarden_KanalPlus" tvg-name="Kanal Plus" tvg-logo="https://ui-avatars.com/api/?name=KanalPlus&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Kanal Plus
 https://live.artidijitalmedya.com/artidijital_kanalplus/kanalplus/mpeg/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_KanalV" tvg-name="Kanal V" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-v-tr.png" group-title="Yerel",Kanal V
 https://live.artidijitalmedya.com/artidijital_kanalv/kanalv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_KaradenizTV" tvg-name="Karadeniz TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Karadeniz TV
+#EXTINF:-1 tvg-id="TVGarden_KaradenizTV" tvg-name="Karadeniz TV" tvg-logo="https://ui-avatars.com/api/?name=KaradenizTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Karadeniz TV
 https://panel.5gtvhosting.com/hls/karadeniztv/karadeniztv.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_KayTV" tvg-name="Kay TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Kay TV
+#EXTINF:-1 tvg-id="TVGarden_KayTV" tvg-name="Kay TV" tvg-logo="https://ui-avatars.com/api/?name=KayTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Kay TV
 https://live.artidijitalmedya.com/artidijital_kaytv/kaytv/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_KentTurk" tvg-name="Kent Türk" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kent-turk-tr.png" group-title="Yerel",Kent Türk
@@ -392,7 +392,7 @@ https://live.artidijitalmedya.com/artidijital_kentturktv/kentturktv/playlist.m3u
 #EXTINF:-1 tvg-id="TVGarden_LineTV" tvg-name="Line TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/line-tv-tr.png" group-title="Yerel",Line TV
 https://edge2.taksimbilisim.com/linetv/bant1/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_LuysTV" tvg-name="Luys TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Luys TV
+#EXTINF:-1 tvg-id="TVGarden_LuysTV" tvg-name="Luys TV" tvg-logo="https://ui-avatars.com/api/?name=LuysTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Luys TV
 https://b01c02nl.mediatriple.net/videoonlylive/mtpayqrfkgirxelive/broadcast_5e91c5ac96898.smil/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_MaviKaradeniz" tvg-name="MaviKaradeniz TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/mavi-karadeniz-tr.png" group-title="Yerel",MaviKaradeniz TV
@@ -401,7 +401,7 @@ https://live.artidijitalmedya.com/artidijital_mavikaradeniz/mavikaradeniz/playli
 #EXTINF:-1 tvg-id="TVGarden_MercanTV" tvg-name="Mercan TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/mercan-tv-tr.png" group-title="Yerel",Mercan TV
 https://live.artidijitalmedya.com/artidijital_mercantv/mercantv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_OlayTurk" tvg-name="OlayTürk TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Haber",OlayTürk TV
+#EXTINF:-1 tvg-id="TVGarden_OlayTurk" tvg-name="OlayTürk TV" tvg-logo="https://ui-avatars.com/api/?name=OlayTurk&background=334155&color=fff&size=256&bold=true&format=png" group-title="Haber",OlayTürk TV
 https://live.artidijitalmedya.com/artidijital_olayturk/olayturk/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_PowerAkustik" tvg-name="PowerTürk Akustik" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/powerturk-tr.png" group-title="Müzik",PowerTürk Akustik
@@ -413,25 +413,25 @@ https://livetv.powerapp.com.tr/pturkslow/slow.smil/playlist.m3u8
 #EXTINF:-1 tvg-id="TVGarden_PowerTaptaze" tvg-name="PowerTürk Taptaze" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/powerturk-tr.png" group-title="Müzik",PowerTürk Taptaze
 https://livetv.powerapp.com.tr/pturktaptaze/taptaze.smil/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_RuhaTV" tvg-name="Ruha TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Ruha TV
+#EXTINF:-1 tvg-id="TVGarden_RuhaTV" tvg-name="Ruha TV" tvg-logo="https://ui-avatars.com/api/?name=RuhaTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Ruha TV
 https://ruhatv.radyotelekom.com.tr:3515/live/ruhatvlive.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_Semerkand" tvg-name="Semerkand TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/semerkand-tv-tr.png" group-title="Dini",Semerkand TV
 https://b01c02nl.mediatriple.net/videoonlylive/mtisvwurbfcyslive/broadcast_58d915bd40efc.smil/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_SonmezTV" tvg-name="Sönmez TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Sönmez TV
+#EXTINF:-1 tvg-id="TVGarden_SonmezTV" tvg-name="Sönmez TV" tvg-logo="https://ui-avatars.com/api/?name=SonmezTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Sönmez TV
 https://sonmeztv.ozelip.com.tr:3826/live/sonmeztvlive.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_SunRTV" tvg-name="Sun RTV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Sun RTV
+#EXTINF:-1 tvg-id="TVGarden_SunRTV" tvg-name="Sun RTV" tvg-logo="https://ui-avatars.com/api/?name=SunRTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Sun RTV
 https://live.artidijitalmedya.com/artidijital_sunrtv/sunrtv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_Telenews" tvg-name="Telenews" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Haber",Telenews
+#EXTINF:-1 tvg-id="TVGarden_Telenews" tvg-name="Telenews" tvg-logo="https://ui-avatars.com/api/?name=Telenews&background=334155&color=fff&size=256&bold=true&format=png" group-title="Haber",Telenews
 https://cdn-telenews.yayin.com.tr/telenews/tracks-v1a1/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_TonTV" tvg-name="Ton TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Ton TV
+#EXTINF:-1 tvg-id="TVGarden_TonTV" tvg-name="Ton TV" tvg-logo="https://ui-avatars.com/api/?name=TonTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Ton TV
 https://live.artidijitalmedya.com/artidijital_tontv/tontv/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_TrakyaTurk" tvg-name="Trakya Türk" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",Trakya Türk
+#EXTINF:-1 tvg-id="TVGarden_TrakyaTurk" tvg-name="Trakya Türk" tvg-logo="https://ui-avatars.com/api/?name=TrakyaTurk&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Trakya Türk
 https://live.euromediacenter.com/trakyaturk/tracks-v1a1/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_TRTArabi" tvg-name="TRT Arabi" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/trt-arabi-tr.png" group-title="Genel",TRT Arabi
@@ -440,7 +440,7 @@ https://tv-trtarabi.medya.trt.com.tr/master.m3u8
 #EXTINF:-1 tvg-id="TVGarden_TurkHaber" tvg-name="TürkHaber TV" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/turk-haber-tr.png" group-title="Haber",TürkHaber TV
 https://edge2.taksimbilisim.com/turkhaber/bant1/playlist.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_TV41" tvg-name="TV 41" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Yerel",TV 41
+#EXTINF:-1 tvg-id="TVGarden_TV41" tvg-name="TV 41" tvg-logo="https://ui-avatars.com/api/?name=TV41&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",TV 41
 https://live.artidijitalmedya.com/artidijital_tv41/tv41/playlist.m3u8
 
 #EXTINF:-1 tvg-id="TVGarden_TV52" tvg-name="TV 52" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/tv52-tr.png" group-title="Yerel",TV 52
@@ -449,5 +449,122 @@ https://edge2.taksimbilisim.com/tv52/bant1/chunks.m3u8
 #EXTINF:-1 tvg-id="TVGarden_TVDen" tvg-name="TV Den" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/tv-den-tr.png" group-title="Yerel",TV Den
 https://canli.tvden.com.tr/hls/live.m3u8
 
-#EXTINF:-1 tvg-id="TVGarden_TYTTurk" tvg-name="TYT Türk" tvg-logo="https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png" group-title="Genel",TYT Türk
+#EXTINF:-1 tvg-id="TVGarden_TYTTurk" tvg-name="TYT Türk" tvg-logo="https://ui-avatars.com/api/?name=TYTTurk&background=334155&color=fff&size=256&bold=true&format=png" group-title="Genel",TYT Türk
 https://tytturk-live.ercdn.net/tytturk/tytturk.m3u8
+
+#EXTINF:-1 tvg-id="Public_Afroturk" tvg-name="Afroturk TV" tvg-logo="https://ui-avatars.com/api/?name=Afroturk&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",Afroturk TV
+https://edge.socialsmart.tv/naturaltv/bant1/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_AlZahraTurkic" tvg-name="Al-Zahra TV Türkçe" tvg-logo="https://ui-avatars.com/api/?name=AlZahraTurkic&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Al-Zahra TV Türkçe
+https://live.al-zahratv.com/live/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_Almahriah" tvg-name="Almahriah TV" tvg-logo="https://ui-avatars.com/api/?name=Almahriah&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Almahriah TV
+https://starmenajo.com/hls/almahriah/index.m3u8
+
+#EXTINF:-1 tvg-id="Public_DHA" tvg-name="DHA" tvg-logo="https://ui-avatars.com/api/?name=DHA&background=334155&color=fff&size=256&bold=true&format=png" group-title="Haber",DHA
+https://603c568fccdf5.streamlock.net/live/dhaweb1_C5efC/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_ETVManisa" tvg-name="ETV Manisa" tvg-logo="https://ui-avatars.com/api/?name=ETVManisa&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",ETV Manisa
+https://edge1.socialsmart.tv/manisaetv/bant1/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_FBTV" tvg-name="Fenerbahçe TV" tvg-logo="https://ui-avatars.com/api/?name=FBTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Spor",Fenerbahçe TV
+http://1hskrdto.rocketcdn.com/fenerbahcetv.smil/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_FlashHaber" tvg-name="Flash Haber TV" tvg-logo="https://ui-avatars.com/api/?name=FlashHaber&background=334155&color=fff&size=256&bold=true&format=png" group-title="Haber",Flash Haber TV
+https://b01c02nl.mediatriple.net/videoonlylive/mtyycglqauzjhlive/broadcast_67c053c48829f.smil/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_MedMuzik" tvg-name="Med Müzik" tvg-logo="https://ui-avatars.com/api/?name=MedMuzik&background=334155&color=fff&size=256&bold=true&format=png" group-title="Müzik",Med Müzik
+http://54.36.110.140/live3/live3.m3u8
+
+#EXTINF:-1 tvg-id="Public_MTurk" tvg-name="MTürk TV" tvg-logo="https://ui-avatars.com/api/?name=MTurk&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",MTürk TV
+https://edge1.socialsmart.tv/muglaturk/bant1/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_NaturalTV" tvg-name="Natural TV" tvg-logo="https://ui-avatars.com/api/?name=NaturalTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yaşam",Natural TV
+https://edge1.socialsmart.tv/naturaltv/bant1/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_NationalGeographic" tvg-name="National Geographic" tvg-logo="https://ui-avatars.com/api/?name=NationalGeographic&background=334155&color=fff&size=256&bold=true&format=png" group-title="Belgesel",National Geographic
+https://saran-live.ercdn.net/natgeohd/index.m3u8
+
+#EXTINF:-1 tvg-id="Public_NationalGeographicWild" tvg-name="National Geographic Wild" tvg-logo="https://ui-avatars.com/api/?name=NationalGeographicWild&background=334155&color=fff&size=256&bold=true&format=png" group-title="Belgesel",National Geographic Wild
+https://saran-live.ercdn.net/natgeowild/index.m3u8
+
+#EXTINF:-1 tvg-id="Public_TGRTBelgesel" tvg-name="TGRT Belgesel TV" tvg-logo="https://ui-avatars.com/api/?name=TGRTBelgesel&background=334155&color=fff&size=256&bold=true&format=png" group-title="Belgesel",TGRT Belgesel TV
+https://b01c02nl.mediatriple.net/videoonlylive/mtsxxkzwwuqtglive/broadcast_5fe462afc6a0e.smil/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_DocumentaryPlus" tvg-name="Documentary+" tvg-logo="https://ui-avatars.com/api/?name=DocumentaryPlus&background=334155&color=fff&size=256&bold=true&format=png" group-title="Belgesel",Documentary+
+https://ef79b15c8c7c46c7a9de9d33001dbd07.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-859-DOCUMENTARYPLUS-DOCUMENTARYPLUS/mt/documentaryplus/859/hls/master/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_CGTNDocumentary" tvg-name="CGTN Documentary" tvg-logo="https://ui-avatars.com/api/?name=CGTNDocumentary&background=334155&color=fff&size=256&bold=true&format=png" group-title="Belgesel",CGTN Documentary
+https://hlspackager.akamaized.net/live/DB/CGTN_DOCUMENTARY/HLS/CGTN_DOCUMENTARY.m3u8
+
+#EXTINF:-1 tvg-id="Public_AsharqDocumentary" tvg-name="Asharq Documentary" tvg-logo="https://ui-avatars.com/api/?name=AsharqDocumentary&background=334155&color=fff&size=256&bold=true&format=png" group-title="Belgesel",Asharq Documentary
+https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8
+
+#EXTINF:-1 tvg-id="Public_Qaf" tvg-name="Qaf TV" tvg-logo="https://ui-avatars.com/api/?name=Qaf&background=334155&color=fff&size=256&bold=true&format=png" group-title="Kültür / Sanat",Qaf TV
+https://customer-9vqui33qma2rownb.cloudflarestream.com/7792e558fe54e23bdd4b462ec275cdba/manifest/video.m3u8
+
+#EXTINF:-1 tvg-id="Public_Satranç" tvg-name="Satranç TV" tvg-logo="https://ui-avatars.com/api/?name=Satranç&background=334155&color=fff&size=256&bold=true&format=png" group-title="Eğitim",Satranç TV
+http://139.162.182.79/live/test/index.m3u8
+
+#EXTINF:-1 tvg-id="Public_TJKTV2" tvg-name="TJK TV 2" tvg-logo="https://ui-avatars.com/api/?name=TJKTV2&background=334155&color=fff&size=256&bold=true&format=png" group-title="Spor",TJK TV 2
+https://tjktv-live.tjk.org/tjktv2/tjktv2.m3u8
+
+#EXTINF:-1 tvg-id="Public_TV42" tvg-name="TV 42" tvg-logo="https://ui-avatars.com/api/?name=TV42&background=334155&color=fff&size=256&bold=true&format=png" group-title="Yerel",TV 42
+https://canli.tv42.com.tr/memfs/d936e417-c4bd-4d42-89a2-02f289892d1d.m3u8
+
+#EXTINF:-1 tvg-id="Public_ZarokTV" tvg-name="Zarok TV" tvg-logo="https://ui-avatars.com/api/?name=ZarokTV&background=334155&color=fff&size=256&bold=true&format=png" group-title="Çocuk",Zarok TV
+https://zindikurmanci.zaroktv.com.tr/hls/stream.m3u8
+
+#EXTINF:-1 tvg-id="Public_ShowTurk" tvg-name="Show Türk" tvg-logo="https://ui-avatars.com/api/?name=ShowTurk&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Show Türk
+https://raw.githubusercontent.com/bnyusuf67-crypto/streams/refs/heads/main/streams/shturk.m3u8
+
+#EXTINF:-1 tvg-id="Public_ATVAvrupa" tvg-name="ATV Avrupa" tvg-logo="https://ui-avatars.com/api/?name=ATVAvrupa&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",ATV Avrupa
+https://flask-api-hls-atvavrupahdtrkvz-live.onrender.com/hls_stream/master.m3u8
+
+#EXTINF:-1 tvg-id="Public_TRTWorld" tvg-name="TRT World" tvg-logo="https://ui-avatars.com/api/?name=TRTWorld&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",TRT World
+https://tv-trtworld.medya.trt.com.tr/master.m3u8
+
+#EXTINF:-1 tvg-id="Public_AlJazeeraEnglish" tvg-name="Al Jazeera English" tvg-logo="https://ui-avatars.com/api/?name=AlJazeeraEnglish&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Al Jazeera English
+https://live-hls-web-aje.getaj.net/AJE/index.m3u8
+
+#EXTINF:-1 tvg-id="Public_AlJazeeraArabic" tvg-name="Al Jazeera Arabic" tvg-logo="https://ui-avatars.com/api/?name=AlJazeeraArabic&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Al Jazeera Arabic
+https://live-hls-web-aja.getaj.net/AJA/index.m3u8
+
+#EXTINF:-1 tvg-id="Public_AlArabiya" tvg-name="Al Arabiya" tvg-logo="https://ui-avatars.com/api/?name=AlArabiya&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Al Arabiya
+https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_DWEnglish" tvg-name="DW English" tvg-logo="https://ui-avatars.com/api/?name=DWEnglish&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",DW English
+https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8
+
+#EXTINF:-1 tvg-id="Public_France24English" tvg-name="France 24 English" tvg-logo="https://ui-avatars.com/api/?name=France24English&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",France 24 English
+https://live.france24.com/hls/live/2037218/F24_EN_HI_HLS/master_5000.m3u8
+
+#EXTINF:-1 tvg-id="Public_EuronewsEnglish" tvg-name="Euronews English" tvg-logo="https://ui-avatars.com/api/?name=EuronewsEnglish&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Euronews English
+https://cdn-euronews.akamaized.net/live/eds/euronews-en/25002/index.m3u8
+
+#EXTINF:-1 tvg-id="Public_NHKWorld" tvg-name="NHK World-Japan" tvg-logo="https://ui-avatars.com/api/?name=NHKWorld&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",NHK World-Japan
+https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8
+
+#EXTINF:-1 tvg-id="Public_Arirang" tvg-name="Arirang TV" tvg-logo="https://ui-avatars.com/api/?name=Arirang&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Arirang TV
+https://amdlive-ch01-ctnd-com.akamaized.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_CGTN" tvg-name="CGTN" tvg-logo="https://ui-avatars.com/api/?name=CGTN&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",CGTN
+https://english-livebkali.cgtn.com/live/encgtn.m3u8
+
+#EXTINF:-1 tvg-id="Public_AsharqNews" tvg-name="Asharq News" tvg-logo="https://ui-avatars.com/api/?name=AsharqNews&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Asharq News
+https://live-news.asharq.com/asharq.m3u8
+
+#EXTINF:-1 tvg-id="Public_SkyNewsArabia" tvg-name="Sky News Arabia" tvg-logo="https://ui-avatars.com/api/?name=SkyNewsArabia&background=334155&color=fff&size=256&bold=true&format=png" group-title="Uluslararası",Sky News Arabia
+https://live-stream.skynewsarabia.com/c-horizontal-channel/horizontal-stream/index.m3u8
+
+#EXTINF:-1 tvg-id="Public_Spacetoon" tvg-name="Spacetoon Arabic" tvg-logo="https://ui-avatars.com/api/?name=Spacetoon&background=334155&color=fff&size=256&bold=true&format=png" group-title="Çocuk",Spacetoon Arabic
+https://live-uae-next.spacetoongo.com/ST_MENA_NEXT/hls/r9p2hjipmw2kl.m3u8
+
+#EXTINF:-1 tvg-id="Public_YuGiOh" tvg-name="Yu-Gi-Oh! Channel (English)" tvg-logo="https://ui-avatars.com/api/?name=YuGiOh&background=334155&color=fff&size=256&bold=true&format=png" group-title="Anime / Animasyon",Yu-Gi-Oh! Channel (English)
+https://amg01796-amg01796c19-rakuten-gb-7486.playouts.now.amagi.tv/playlist/amg01796-fastmediafast-yugioh2en-rakutengb/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_ToonamiAftermath" tvg-name="Toonami Aftermath" tvg-logo="https://ui-avatars.com/api/?name=ToonamiAftermath&background=334155&color=fff&size=256&bold=true&format=png" group-title="Anime / Animasyon",Toonami Aftermath
+http://api.toonamiaftermath.com:3000/est/playlist.m3u8
+
+#EXTINF:-1 tvg-id="Public_DiscoveryOfficial" tvg-name="Discovery Channel (Resmî YouTube)" tvg-logo="https://ui-avatars.com/api/?name=DiscoveryOfficial&background=334155&color=fff&size=256&bold=true&format=png" group-title="Belgesel",Discovery Channel (Resmî YouTube)
+https://www.youtube.com/@discovery/live
