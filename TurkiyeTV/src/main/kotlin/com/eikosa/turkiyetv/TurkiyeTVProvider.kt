@@ -41,8 +41,8 @@ private const val YOUTUBE_USER_AGENT =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 private const val YOUTUBE_ANDROID_USER_AGENT =
     "com.google.android.youtube/20.10.38 (Linux; U; Android 14)"
-private const val FALLBACK_LOGO =
-    "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/ulusal-tv-tr.png"
+private fun generatedLogoUrl(id: String): String =
+    "https://ui-avatars.com/api/?name=${id.removePrefix("TVGarden_").removePrefix("Public_").replace("_", "+")}&background=${(id.hashCode() and 0x00FFFFFF).toString(16).padStart(6, '0')}&color=fff&size=256&bold=true&format=png"
 
 private fun tvGardenChannel(
     id: String,
@@ -50,7 +50,7 @@ private fun tvGardenChannel(
     streamUrl: String,
     group: String,
     channelNumber: Int,
-    logoUrl: String = FALLBACK_LOGO,
+    logoUrl: String = generatedLogoUrl(id),
 ) = TvChannel(id, name, streamUrl, logoUrl, group, channelNumber)
 
 private fun youtubeChannel(
@@ -79,12 +79,18 @@ class TurkiyeTVProvider : MainAPI() {
         com.lagradost.cloudstream3.mainPage("news", "Haber"),
         com.lagradost.cloudstream3.mainPage("sports", "Spor"),
         com.lagradost.cloudstream3.mainPage("music", "Müzik"),
-        com.lagradost.cloudstream3.mainPage("kids", "Çocuk / Eğitim"),
-        com.lagradost.cloudstream3.mainPage("culture", "Belgesel / Kültür"),
+        com.lagradost.cloudstream3.mainPage("kids", "Çocuk"),
+        com.lagradost.cloudstream3.mainPage("education", "Eğitim"),
+        com.lagradost.cloudstream3.mainPage("documentary", "Belgesel"),
+        com.lagradost.cloudstream3.mainPage("culture", "Kültür / Sanat"),
         com.lagradost.cloudstream3.mainPage("religion", "Dini"),
-        com.lagradost.cloudstream3.mainPage("entertainment", "Eğlence / Yaşam"),
+        com.lagradost.cloudstream3.mainPage("entertainment", "Eğlence"),
+        com.lagradost.cloudstream3.mainPage("lifestyle", "Yaşam / İş"),
         com.lagradost.cloudstream3.mainPage("youtube", "YouTube / Dizi"),
-        com.lagradost.cloudstream3.mainPage("local", "Yerel / Diğer"),
+        com.lagradost.cloudstream3.mainPage("local", "Yerel"),
+        com.lagradost.cloudstream3.mainPage("regional", "Bölgesel / Genel"),
+        com.lagradost.cloudstream3.mainPage("international", "Uluslararası"),
+        com.lagradost.cloudstream3.mainPage("anime", "Anime / Animasyon"),
     )
 
     // Popüler ulusal ve haber kanalları önce, daha nadir/yerel kanallar sonra listelenir.
@@ -177,6 +183,48 @@ class TurkiyeTVProvider : MainAPI() {
         youtubeChannel("Adanali", "Adanalı", "sF1AgroEr60", "Dizi / YouTube", 230),
         youtubeChannel("EmretKomutanim", "Emret Komutanım", "b4U9nt3s128", "Dizi / YouTube", 231),
         youtubeChannel("CocuklarDuymasin", "Çocuklar Duymasın", "g7oVIIevRMk", "Dizi / YouTube", 232),
+    )
+
+    private val extraChannels = listOf(
+        tvGardenChannel("Public_Afroturk", "Afroturk TV", "https://edge.socialsmart.tv/naturaltv/bant1/playlist.m3u8", "Yerel", 301),
+        tvGardenChannel("Public_AlZahraTurkic", "Al-Zahra TV Türkçe", "https://live.al-zahratv.com/live/playlist.m3u8", "Uluslararası", 302),
+        tvGardenChannel("Public_Almahriah", "Almahriah TV", "https://starmenajo.com/hls/almahriah/index.m3u8", "Uluslararası", 303),
+        tvGardenChannel("Public_DHA", "DHA", "https://603c568fccdf5.streamlock.net/live/dhaweb1_C5efC/playlist.m3u8", "Haber", 304),
+        tvGardenChannel("Public_ETVManisa", "ETV Manisa", "https://edge1.socialsmart.tv/manisaetv/bant1/playlist.m3u8", "Yerel", 305),
+        tvGardenChannel("Public_FBTV", "Fenerbahçe TV", "http://1hskrdto.rocketcdn.com/fenerbahcetv.smil/playlist.m3u8", "Spor", 306),
+        tvGardenChannel("Public_FlashHaber", "Flash Haber TV", "https://b01c02nl.mediatriple.net/videoonlylive/mtyycglqauzjhlive/broadcast_67c053c48829f.smil/playlist.m3u8", "Haber", 307),
+        tvGardenChannel("Public_MedMuzik", "Med Müzik", "http://54.36.110.140/live3/live3.m3u8", "Müzik", 308),
+        tvGardenChannel("Public_MTurk", "MTürk TV", "https://edge1.socialsmart.tv/muglaturk/bant1/playlist.m3u8", "Uluslararası", 309),
+        tvGardenChannel("Public_NaturalTV", "Natural TV", "https://edge1.socialsmart.tv/naturaltv/bant1/playlist.m3u8", "Yaşam", 310),
+        tvGardenChannel("Public_NationalGeographic", "National Geographic", "https://saran-live.ercdn.net/natgeohd/index.m3u8", "Belgesel", 311),
+        tvGardenChannel("Public_NationalGeographicWild", "National Geographic Wild", "https://saran-live.ercdn.net/natgeowild/index.m3u8", "Belgesel", 312),
+        tvGardenChannel("Public_TGRTBelgesel", "TGRT Belgesel TV", "https://b01c02nl.mediatriple.net/videoonlylive/mtsxxkzwwuqtglive/broadcast_5fe462afc6a0e.smil/playlist.m3u8", "Belgesel", 313),
+        tvGardenChannel("Public_DocumentaryPlus", "Documentary+", "https://ef79b15c8c7c46c7a9de9d33001dbd07.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-859-DOCUMENTARYPLUS-DOCUMENTARYPLUS/mt/documentaryplus/859/hls/master/playlist.m3u8", "Belgesel", 314),
+        tvGardenChannel("Public_CGTNDocumentary", "CGTN Documentary", "https://hlspackager.akamaized.net/live/DB/CGTN_DOCUMENTARY/HLS/CGTN_DOCUMENTARY.m3u8", "Belgesel", 315),
+        tvGardenChannel("Public_AsharqDocumentary", "Asharq Documentary", "https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8", "Belgesel", 316),
+        tvGardenChannel("Public_Qaf", "Qaf TV", "https://customer-9vqui33qma2rownb.cloudflarestream.com/7792e558fe54e23bdd4b462ec275cdba/manifest/video.m3u8", "Kültür / Sanat", 317),
+        tvGardenChannel("Public_Satranç", "Satranç TV", "http://139.162.182.79/live/test/index.m3u8", "Eğitim", 318),
+        tvGardenChannel("Public_TJKTV2", "TJK TV 2", "https://tjktv-live.tjk.org/tjktv2/tjktv2.m3u8", "Spor", 319),
+        tvGardenChannel("Public_TV42", "TV 42", "https://canli.tv42.com.tr/memfs/d936e417-c4bd-4d42-89a2-02f289892d1d.m3u8", "Yerel", 320),
+        tvGardenChannel("Public_ZarokTV", "Zarok TV", "https://zindikurmanci.zaroktv.com.tr/hls/stream.m3u8", "Çocuk", 321),
+        tvGardenChannel("Public_ShowTurk", "Show Türk", "https://raw.githubusercontent.com/bnyusuf67-crypto/streams/refs/heads/main/streams/shturk.m3u8", "Uluslararası", 322),
+        tvGardenChannel("Public_ATVAvrupa", "ATV Avrupa", "https://flask-api-hls-atvavrupahdtrkvz-live.onrender.com/hls_stream/master.m3u8", "Uluslararası", 323),
+        tvGardenChannel("Public_TRTWorld", "TRT World", "https://tv-trtworld.medya.trt.com.tr/master.m3u8", "Uluslararası", 324),
+        tvGardenChannel("Public_AlJazeeraEnglish", "Al Jazeera English", "https://live-hls-web-aje.getaj.net/AJE/index.m3u8", "Uluslararası", 325),
+        tvGardenChannel("Public_AlJazeeraArabic", "Al Jazeera Arabic", "https://live-hls-web-aja.getaj.net/AJA/index.m3u8", "Uluslararası", 326),
+        tvGardenChannel("Public_AlArabiya", "Al Arabiya", "https://live.alarabiya.net/alarabiapublish/alarabiya.smil/playlist.m3u8", "Uluslararası", 327),
+        tvGardenChannel("Public_DWEnglish", "DW English", "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/master.m3u8", "Uluslararası", 328),
+        tvGardenChannel("Public_France24English", "France 24 English", "https://live.france24.com/hls/live/2037218/F24_EN_HI_HLS/master_5000.m3u8", "Uluslararası", 329),
+        tvGardenChannel("Public_EuronewsEnglish", "Euronews English", "https://cdn-euronews.akamaized.net/live/eds/euronews-en/25002/index.m3u8", "Uluslararası", 330),
+        tvGardenChannel("Public_NHKWorld", "NHK World-Japan", "https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8", "Uluslararası", 331),
+        tvGardenChannel("Public_Arirang", "Arirang TV", "https://amdlive-ch01-ctnd-com.akamaized.net/arirang_1ch/smil:arirang_1ch.smil/playlist.m3u8", "Uluslararası", 332),
+        tvGardenChannel("Public_CGTN", "CGTN", "https://english-livebkali.cgtn.com/live/encgtn.m3u8", "Uluslararası", 333),
+        tvGardenChannel("Public_AsharqNews", "Asharq News", "https://live-news.asharq.com/asharq.m3u8", "Uluslararası", 334),
+        tvGardenChannel("Public_SkyNewsArabia", "Sky News Arabia", "https://live-stream.skynewsarabia.com/c-horizontal-channel/horizontal-stream/index.m3u8", "Uluslararası", 335),
+        tvGardenChannel("Public_Spacetoon", "Spacetoon Arabic", "https://live-uae-next.spacetoongo.com/ST_MENA_NEXT/hls/r9p2hjipmw2kl.m3u8", "Çocuk", 336),
+        tvGardenChannel("Public_YuGiOh", "Yu-Gi-Oh! Channel (English)", "https://amg01796-amg01796c19-rakuten-gb-7486.playouts.now.amagi.tv/playlist/amg01796-fastmediafast-yugioh2en-rakutengb/playlist.m3u8", "Anime / Animasyon", 337),
+        tvGardenChannel("Public_ToonamiAftermath", "Toonami Aftermath", "http://api.toonamiaftermath.com:3000/est/playlist.m3u8", "Anime / Animasyon", 338),
+        tvGardenChannel("Public_DiscoveryOfficial", "Discovery Channel (Resmî YouTube)", "https://www.youtube.com/@discovery/live", "Belgesel", 339),
     )
 
     // 100 öncelikli ulusal/yerel yayın ve yukarıdaki doğrulanmış TV Garden yayınları.
@@ -641,7 +689,7 @@ class TurkiyeTVProvider : MainAPI() {
             id = "GZT.tr@SD",
             name = "GZT",
             streamUrl = "https://gzttv-live.lg.mncdn.com/gzttv/gzttv/playlist.m3u8",
-            logoUrl = FALLBACK_LOGO,
+            logoUrl = "https://ui-avatars.com/api/?name=GZT&background=365314&color=d9f99d&size=256&bold=true&format=png",
             group = "Belgesel / Dizi",
             channelNumber = 56,
         ),
@@ -981,7 +1029,7 @@ class TurkiyeTVProvider : MainAPI() {
             group = "Genel",
             channelNumber = 98,
         ),
-    ) + tvGardenChannels + youtubeChannels
+    ) + tvGardenChannels + youtubeChannels + extraChannels
 
     private val popularNewsOrder = listOf(
         "CNN TÜRK",
@@ -1001,31 +1049,22 @@ class TurkiyeTVProvider : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         val categorizedChannels = when (request.data) {
-            // Her yayın tam olarak bir kategoriye düşer; ayrı bir "Öne Çıkanlar"
-            // satırı olmadığı için aynı kanal ikinci kez gösterilmez.
-            "general" -> channels.filter {
-                it.group == "Genel" && (it.channelNumber <= 32 || it.id == "Teve2.tr@SD")
-            }
-            "news" -> channels.filter { it.group == "Haber" }.sortedBy {
-                popularNewsOrder.indexOf(it.name).let { index ->
-                    if (index == -1) Int.MAX_VALUE else index
-                }
-            }
+            "general" -> channels.filter { it.group == "Genel" && (it.channelNumber <= 32 || it.id == "Teve2.tr@SD") }
+            "news" -> channels.filter { it.group == "Haber" }.sortedBy { popularNewsOrder.indexOf(it.name).let { i -> if (i == -1) Int.MAX_VALUE else i } }
             "sports" -> channels.filter { it.group == "Spor" }
             "music" -> channels.filter { it.group == "Müzik" }
-            "kids" -> channels.filter { it.group == "Çocuk" || it.group == "Eğitim" }
-            "culture" -> channels.filter {
-                it.group.startsWith("Belgesel") || it.group.startsWith("Kültür")
-            }
+            "kids" -> channels.filter { it.group == "Çocuk" }
+            "education" -> channels.filter { it.group == "Eğitim" }
+            "documentary" -> channels.filter { it.group == "Belgesel" }
+            "culture" -> channels.filter { it.group.startsWith("Kültür") }
             "religion" -> channels.filter { it.group == "Dini" }
-            "entertainment" -> channels.filter {
-                it.group == "Eğlence" || it.group == "Yaşam" || it.group == "İş / Dizi"
-            }
+            "entertainment" -> channels.filter { it.group == "Eğlence" }
+            "lifestyle" -> channels.filter { it.group == "Yaşam" || it.group == "İş / Dizi" }
             "youtube" -> channels.filter { it.group == "Dizi / YouTube" }
-            "local" -> channels.filter {
-                (it.group == "Genel" && it.channelNumber > 32 && it.id != "Teve2.tr@SD") ||
-                    it.group == "Yerel"
-            }
+            "local" -> channels.filter { it.group == "Yerel" }
+            "regional" -> channels.filter { it.group == "Genel" && it.channelNumber > 32 && it.id != "Teve2.tr@SD" }
+            "international" -> channels.filter { it.group == "Uluslararası" }
+            "anime" -> channels.filter { it.group == "Anime / Animasyon" }
             else -> emptyList()
         }
         val items = categorizedChannels.map { it.toSearchResponse() }
@@ -1048,6 +1087,8 @@ class TurkiyeTVProvider : MainAPI() {
         "İş / Dizi",
         "Dizi / YouTube",
         "Yerel",
+        "Uluslararası",
+        "Anime / Animasyon",
     )
 
     override suspend fun search(query: String): List<SearchResponse> {
@@ -1101,7 +1142,7 @@ class TurkiyeTVProvider : MainAPI() {
         }
 
         val streamPath = data.substringBefore("?").substringBefore("#")
-        if (!data.startsWith("https://") || !streamPath.endsWith(".m3u8")) return false
+        if (!(data.startsWith("https://") || data.startsWith("http://")) || !streamPath.endsWith(".m3u8")) return false
 
         callback(newExtractorLink(source = name, name = "${name} • HLS", url = data, type = ExtractorLinkType.M3U8) {
             referer = ""
@@ -1174,7 +1215,12 @@ class TurkiyeTVProvider : MainAPI() {
     ): Boolean = runCatching {
         val videoId = Regex(
             "(?:youtu\\.be/|youtube(?:-nocookie)?\\.com/(?:.*v=|v/|u/\\w/|embed/|shorts/|live/))([\\w-]{11})",
-        ).find(data)?.groupValues?.get(1) ?: return@runCatching false
+        ).find(data)?.groupValues?.get(1)
+            ?: runCatching {
+                app.get(data, headers = mapOf("User-Agent" to YOUTUBE_USER_AGENT)).text
+                    .let { Regex("\\\"videoId\\\"\\s*:\\s*\\\"([\\w-]{11})\\\"").find(it)?.groupValues?.get(1) }
+            }.getOrNull()
+            ?: return@runCatching false
 
         val requestHeaders = mapOf(
             "User-Agent" to YOUTUBE_USER_AGENT,
@@ -1292,7 +1338,7 @@ class TurkiyeTVProvider : MainAPI() {
         fix = false,
     ) {
         posterUrl = logoUrl
-        lang = "tr"
+        lang = if (group == "Uluslararası") "en" else "tr"
     }
 
     private fun isYouTubeUrl(url: String): Boolean =
