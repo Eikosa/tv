@@ -33,6 +33,10 @@ private const val TEVE2_APP_ID = "6aab838a-437e-4a1b-bbd0-e30f79cdbbbd"
 private const val TEVE2_SID_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789"
 private const val TEVE2_USER_AGENT =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+private const val NOWTV_PAGE_URL = "https://www.nowtv.com.tr/canli-yayin"
+private const val NOWTV_REFERER = "https://www.nowtv.com.tr/"
+private const val NOWTV_USER_AGENT =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36"
 private const val YOUTUBE_USER_AGENT =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 private const val YOUTUBE_ANDROID_USER_AGENT =
@@ -145,7 +149,7 @@ class TurkiyeTVProvider : MainAPI() {
     private val youtubeChannels = listOf(
         youtubeChannel("CNNTurk", "CNN TÜRK", "6N8_r2uwLEc", "Haber", 201),
         youtubeChannel("SozcuTV", "SÖZCÜ TV", "ztmY_cCtUl0", "Haber", 202),
-        youtubeChannel("BloombergHT", "Bloomberg HT", "5ngQ40FQHv0", "Haber", 203),
+        youtubeChannel("BloombergHT", "Bloomberg HT", "j7B_zsL11Pw", "Haber", 203),
         youtubeChannel("APara", "A Para", "Fas1VhgP8Uk", "Haber", 204),
         youtubeChannel("Benguturk", "Bengütürk TV", "MOhcWsOL1Us", "Haber", 205),
         youtubeChannel("KRT", "KRT TV", "_k0wG2Qah1g", "Haber", 206),
@@ -158,7 +162,6 @@ class TurkiyeTVProvider : MainAPI() {
         youtubeChannel("Gumball", "Gumball", "9LDR3lHACKM", "Çocuk", 214),
         youtubeChannel("AskNeva", "Aşk-ı Nevâ", "2aAuvDd2tSo", "Dini", 215),
         youtubeChannel("CAHMedya", "CAH Medya", "DL99RVqsAvg", "Dini", 216),
-        youtubeChannel("Ibrahimlive", "İbrahimlive", "uUL6u3mNQyg", "Dini", 217),
         youtubeChannel("AnkaraBB", "Ankara Büyükşehir Belediyesi", "B-84y-luaTs", "Yerel", 218),
         youtubeChannel("GuldurGuldur", "Güldür Güldür Show", "6iTXnuBXXqI", "Eğlence", 219),
         youtubeChannel("GulsahFilm", "Gülşah Film: Kemal Sunal Filmleri", "8AkJ9BgYB-c", "Dizi / YouTube", 220),
@@ -223,7 +226,7 @@ class TurkiyeTVProvider : MainAPI() {
             name = "NOW TV",
             streamUrl = "https://uycyyuuzyh.turknet.ercdn.net/nphindgytw/nowtv/nowtv.m3u8",
             logoUrl = "https://i.imgur.com/5EYjWK7.png",
-            group = "Eğlence",
+            group = "Genel",
             channelNumber = 6,
         ),
         TvChannel(
@@ -1073,6 +1076,10 @@ class TurkiyeTVProvider : MainAPI() {
         subtitleCallback: (com.lagradost.cloudstream3.SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
+        if (isNowTvUrl(data)) {
+            return resolveNowTvStream(callback)
+        }
+
         if (isYouTubeUrl(data)) {
             // Bazı CloudStream/NewPipe sürümleri canlı yayında loadExtractor'dan
             // true döndürüp hiç link üretmeyebiliyor. Önce doğrudan YouTube'un
@@ -1102,6 +1109,59 @@ class TurkiyeTVProvider : MainAPI() {
         })
         return true
     }
+
+    /**
+     * NOW, yayın adresine kısa ömürlü st/e parametreleri ekliyor. Sabit bir
+     * CDN URL'si kullanmak yayının bir süre sonra kendiliğinden kapanmasına
+     * neden olur; bu yüzden sayfadan her oynatmada yeni adres alıyoruz.
+     */
+    private suspend fun resolveNowTvStream(
+        callback: (ExtractorLink) -> Unit,
+    ): Boolean = runCatching {
+        val response = app.get(
+            NOWTV_PAGE_URL,
+            headers = mapOf(
+                "User-Agent" to NOWTV_USER_AGENT,
+                "Accept-Language" to "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+            ),
+            referer = NOWTV_REFERER,
+        )
+        if (!response.isSuccessful) return@runCatching false
+
+        val streamUrl = Regex("https?://[^\\\"'\\s]+\\.m3u8[^\\\"'\\s]*")
+            .findAll(response.text)
+            .map { it.value.replace("&amp;", "&").replace("\\u0026", "&") }
+            .firstOrNull { it.contains("nowtv.daioncdn.net/nowtv/nowtv.m3u8") }
+            ?: return@runCatching false
+
+        val playlist = app.get(
+            streamUrl,
+            headers = mapOf(
+                "Origin" to "https://www.nowtv.com.tr",
+                "Referer" to NOWTV_REFERER,
+                "User-Agent" to NOWTV_USER_AGENT,
+            ),
+            referer = NOWTV_REFERER,
+        )
+        if (!playlist.isSuccessful || !playlist.text.contains("#EXTM3U")) return@runCatching false
+
+        callback(
+            newExtractorLink(
+                source = name,
+                name = "NOW TV • HLS",
+                url = streamUrl,
+                type = ExtractorLinkType.M3U8,
+            ) {
+                referer = NOWTV_REFERER
+                quality = Qualities.Unknown.value
+                headers = mapOf(
+                    "Origin" to "https://www.nowtv.com.tr",
+                    "User-Agent" to NOWTV_USER_AGENT,
+                )
+            },
+        )
+        true
+    }.getOrDefault(false)
 
     /**
      * YouTube canlı yayınları için CloudStream sürümünden bağımsız HLS çözümü.
@@ -1240,4 +1300,8 @@ class TurkiyeTVProvider : MainAPI() {
             url.startsWith("https://youtube.com/") ||
             url.startsWith("https://www.youtube-nocookie.com/") ||
             url.startsWith("https://youtu.be/")
+
+    private fun isNowTvUrl(url: String): Boolean =
+        url.contains("/nowtv/", ignoreCase = true) &&
+            url.contains("nowtv", ignoreCase = true)
 }

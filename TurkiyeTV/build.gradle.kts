@@ -1,4 +1,4 @@
-version = 4
+version = 5
 
 cloudstream {
     description = "Türkiye ulusal televizyon kanallarını CloudStream üzerinden izleyin."
