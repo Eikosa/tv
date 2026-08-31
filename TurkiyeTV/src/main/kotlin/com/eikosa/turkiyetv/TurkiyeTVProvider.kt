@@ -1161,6 +1161,47 @@ class TurkiyeTVProvider : MainAPI() {
             return loadYouTubeCollection(collection)
         }
 
+        // Bazı CloudStream sürümleri SearchResponse verisini provider'a geri
+        // gönderirken kendi kimliğimiz yerine kaynak adresini kullanıyor.
+        // Bu nedenle dışarıdan gelen doğrudan HLS ve YouTube canlı adreslerini
+        // de yüklenebilir bir canlı sayfaya dönüştürüyoruz.
+        if (isYouTubeUrl(url)) {
+            val collection = when {
+                url.contains("@discovery", ignoreCase = true) -> youtubeCollections.firstOrNull {
+                    it.id == "YouTubeCollection_DiscoveryChannelTurkiye"
+                }
+                url.contains("@nationalgeographic", ignoreCase = true) -> youtubeCollections.firstOrNull {
+                    it.id == "YouTubeCollection_NationalGeographicTurkiye"
+                }
+                else -> null
+            }
+            return newLiveStreamLoadResponse(
+                collection?.name ?: "YouTube Canlı Yayın",
+                url,
+                url,
+            ) {
+                posterUrl = collection?.logoUrl
+                plot = "YouTube üzerindeki herkese açık canlı yayın."
+                tags = listOf("YouTube", "Canlı TV")
+            }
+        }
+
+        val directHls = url.substringBefore("?").substringBefore("#")
+        if ((url.startsWith("https://") || url.startsWith("http://")) &&
+            (directHls.endsWith(".m3u8", ignoreCase = true) || url.contains(".m3u8", ignoreCase = true))
+        ) {
+            val knownChannel = channels.firstOrNull { it.streamUrl == url }
+            return newLiveStreamLoadResponse(
+                knownChannel?.name ?: "Canlı HLS Yayını",
+                url,
+                url,
+            ) {
+                posterUrl = knownChannel?.logoUrl
+                plot = "Doğrudan HLS canlı yayın adresi."
+                tags = listOf("HLS", "Canlı TV")
+            }
+        }
+
         error("Bilinmeyen kanal: $url")
     }
 

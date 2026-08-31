@@ -207,6 +207,8 @@ $entries = @(Get-M3uEntries $m3uPath)
 Assert-Condition ($entries.Count -ge 190) "M3U kanal sayısı beklenenden az: $($entries.Count)."
 Assert-Condition ($source -notmatch 'name\s*=\s*"\d+[.)]\s') "Kanal adlarında listeleme numarası bulundu."
 Assert-Condition ($source -match 'newTvSeriesLoadResponse') "Resmî YouTube koleksiyon desteği bulunamadı."
+Assert-Condition ($source -match 'if \(isYouTubeUrl\(url\)\)') "YouTube canlı adresleri için load uyumluluk katmanı bulunamadı."
+Assert-Condition ($source -match 'directHls\.endsWith\("\.m3u8"') "Doğrudan HLS adresleri için load uyumluluk katmanı bulunamadı."
 $providerIds = @()
 $providerIds += [regex]::Matches($source, '(?m)^\s*id\s*=\s*"([^"]+)"') | ForEach-Object { $_.Groups[1].Value }
 $providerIds += [regex]::Matches($source, 'tvGardenChannel\("([^"]+)"') | ForEach-Object { $_.Groups[1].Value }
