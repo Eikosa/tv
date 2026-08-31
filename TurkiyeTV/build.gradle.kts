@@ -1,7 +1,7 @@
-version = 5
+version = 6
 cloudstream {
     description = "Türkiye ulusal televizyon kanallarını CloudStream üzerinden izleyin."
     authors = listOf("Eikosa")
     status = 1
-    tvTypes = listOf("Live")
+    tvTypes = listOf("Live", "TvSeries")
 }

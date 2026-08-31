@@ -7,12 +7,17 @@ on:
       - "*.md"
   workflow_dispatch:
 
+concurrency:
+  group: cloudstream-build-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -63,11 +68,17 @@ jobs:
           python3 - <<'PY'
           import hashlib
           import json
+          import re
           import zipfile
           from pathlib import Path
 
           package = Path("TurkiyeTV/build/TurkiyeTV.cs3")
           generated = Path("build/plugins.json")
+          build_config = Path("TurkiyeTV/build.gradle.kts").read_text(encoding="utf-8")
+          version_match = re.search(r"(?m)^version\s*=\s*(\d+)", build_config)
+          if not version_match:
+              raise SystemExit("VALIDATION FAILED: build.gradle.kts sürümü okunamadı.")
+          expected_version = int(version_match.group(1))
 
           if not package.is_file() or package.stat().st_size == 0:
               raise SystemExit("VALIDATION FAILED: TurkiyeTV.cs3 yok veya boş.")
@@ -87,7 +98,7 @@ jobs:
               raise SystemExit("VALIDATION FAILED: plugins.json dosya boyutu paketi eşleşmiyor.")
           if entry.get("internalName") != "TurkiyeTV":
               raise SystemExit("VALIDATION FAILED: internalName TurkiyeTV değil.")
-          if int(entry.get("version", -1)) != 5:
+          if int(entry.get("version", -1)) != expected_version:
               raise SystemExit(f"VALIDATION FAILED: beklenmeyen plugin sürümü: {entry.get('version')}.")
 
           with zipfile.ZipFile(package) as archive:
@@ -111,6 +122,32 @@ jobs:
           expected_url = "https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3"
           if entry.get("url") != expected_url:
               raise SystemExit("VALIDATION FAILED: katalog plugin URL'si yanlış.")
+
+          playlist_lines = Path("turkiye_ulusal_tv.m3u").read_text(encoding="utf-8").splitlines()
+          playlist_entries = []
+          for index, line in enumerate(playlist_lines):
+              if not line.startswith("#EXTINF"):
+                  continue
+              match_id = re.search(r'tvg-id="([^"]+)"', line)
+              match_group = re.search(r'group-title="([^"]+)"', line)
+              name = line.rsplit(",", 1)[-1].strip()
+              cursor = index + 1
+              while cursor < len(playlist_lines) and not playlist_lines[cursor].strip():
+                  cursor += 1
+              stream_url = playlist_lines[cursor].strip() if cursor < len(playlist_lines) else ""
+              if not match_id or not match_group or not stream_url.startswith(("http://", "https://")):
+                  raise SystemExit(f"VALIDATION FAILED: eksik M3U alanı: {name}")
+              if "youtube.com" in stream_url or "youtu.be" in stream_url:
+                  raise SystemExit(f"VALIDATION FAILED: M3U içinde YouTube sayfası var: {name}")
+              playlist_entries.append((name, match_id.group(1), stream_url))
+
+          if len(playlist_entries) < 190:
+              raise SystemExit(f"VALIDATION FAILED: M3U kanal sayısı düşük: {len(playlist_entries)}")
+          for field_index, field_name in enumerate(("ad", "tvg-id", "adres")):
+              values = [item[field_index] for item in playlist_entries]
+              duplicates = sorted({value for value in values if values.count(value) > 1})
+              if duplicates:
+                  raise SystemExit(f"VALIDATION FAILED: yinelenen M3U {field_name}: {duplicates}")
 
           print(f"VALIDATION PASSED: {package} | {len(data)} bytes | sha256-{actual_hash}")
 
