@@ -204,6 +204,14 @@ try {
     try { $manifest = ($reader.ReadToEnd() | ConvertFrom-Json) } finally { $reader.Dispose() }
     Assert-Condition ($manifest.pluginClassName -eq "com.eikosa.turkiyetv.TurkiyeTVPlugin") "Plugin sınıfı manifest ile eşleşmiyor."
     Assert-Condition ([int]$manifest.version -eq $expectedVersion) "Manifest sürümü build.gradle.kts ile eşleşmiyor."
+    $dexStream = $dexEntry.Open()
+    $dexBuffer = New-Object byte[] ($dexEntry.Length)
+    [void]$dexStream.Read($dexBuffer, 0, $dexBuffer.Length)
+    $dexStream.Dispose()
+    Assert-Condition ($dexBuffer.Length -ge 8 -and [Text.Encoding]::ASCII.GetString($dexBuffer, 0, 4) -eq "dex`n") "classes.dex geçerli Dalvik DEX başlığı içermiyor."
+    $dexText = [Text.Encoding]::ASCII.GetString($dexBuffer)
+    Assert-Condition ($dexText.Contains("Lcom/eikosa/turkiyetv/TurkiyeTVPlugin;")) "classes.dex içinde TurkiyeTVPlugin sınıfı bulunamadı."
+    Assert-Condition ($dexText.Contains("Lcom/eikosa/turkiyetv/TurkiyeTVProvider;")) "classes.dex içinde TurkiyeTVProvider sınıfı bulunamadı."
 } finally { $archive.Dispose() }
 
 Write-Host "[3/8] Repo adresleri, kanal kimlikleri ve kategoriler doğrulanıyor..."
@@ -211,7 +219,9 @@ $rootEntry = ((Get-Content $rootListPath -Raw) | ConvertFrom-Json)[0]
 $repoInfo = Get-Content $repoManifestPath -Raw | ConvertFrom-Json
 Assert-Condition ($rootEntry.internalName -eq "TurkiyeTV") "Ana plugins.json TurkiyeTV kaydını içermiyor."
 Assert-Condition ($rootEntry.url -eq "https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3") "Plugin URL'si builds dalını göstermiyor."
-Assert-Condition ($repoInfo.pluginLists -contains "https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json") "repo.json builds plugin listesini göstermiyor."
+Assert-Condition ($repoInfo.pluginLists.Count -eq 1) "repo.json tam olarak 1 adet pluginLists URL içermelidir (mevcut: $($repoInfo.pluginLists.Count)). Birden fazla URL CloudStream arayüzünde yinelenen eklentiye yol açar."
+Assert-Condition ($repoInfo.pluginLists[0] -eq "https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json") "repo.json builds plugin listesini göstermiyor."
+
 $source = Get-Content $sourcePath -Raw
 $entries = @(Get-M3uEntries $m3uPath)
 Assert-Condition ($entries.Count -ge 190) "M3U kanal sayısı beklenenden az: $($entries.Count)."

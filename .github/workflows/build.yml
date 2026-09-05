@@ -35,7 +35,13 @@ jobs:
         shell: bash
         run: |
           mkdir -p builds
+          if [ -d "builds/.git" ]; then
+            PREV_SHA=$(git -C builds rev-parse HEAD 2>/dev/null || echo "")
+            echo "LAST_GOOD_BUILDS_SHA=${PREV_SHA}" >> $GITHUB_ENV
+            echo "Son calisan kararli builds commit'i kaydedildi: ${PREV_SHA}"
+          fi
           find builds -maxdepth 1 -type f -name '*.cs3' -delete
+
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -113,6 +119,13 @@ jobs:
               if missing:
                   raise SystemExit(f"VALIDATION FAILED: pakette eksik dosya: {sorted(missing)}")
               manifest = json.loads(archive.read("manifest.json"))
+              dex_data = archive.read("classes.dex")
+              if not dex_data.startswith(b"dex\n"):
+                  raise SystemExit("VALIDATION FAILED: classes.dex geçerli bir Dalvik DEX başlığı içermiyor.")
+              if b"Lcom/eikosa/turkiyetv/TurkiyeTVPlugin;" not in dex_data:
+                  raise SystemExit("VALIDATION FAILED: classes.dex içinde TurkiyeTVPlugin sınıfı bulunamadı.")
+              if b"Lcom/eikosa/turkiyetv/TurkiyeTVProvider;" not in dex_data:
+                  raise SystemExit("VALIDATION FAILED: classes.dex içinde TurkiyeTVProvider sınıfı bulunamadı.")
 
           if manifest.get("pluginClassName") != "com.eikosa.turkiyetv.TurkiyeTVPlugin":
               raise SystemExit("VALIDATION FAILED: manifest pluginClassName yanlış.")
@@ -121,9 +134,29 @@ jobs:
           if manifest.get("name") != entry.get("name"):
               raise SystemExit("VALIDATION FAILED: manifest ve katalog adı farklı.")
 
+          repo_file = Path("repo.json")
+          if not repo_file.is_file():
+              raise SystemExit("VALIDATION FAILED: repo.json bulunamadı.")
+          repo_data = json.loads(repo_file.read_text(encoding="utf-8"))
+          if not repo_data.get("name") or not repo_data.get("pluginLists"):
+              raise SystemExit("VALIDATION FAILED: repo.json name veya pluginLists eksik.")
+          plugin_lists = repo_data.get("pluginLists", [])
+          if len(plugin_lists) != 1:
+              raise SystemExit(f"VALIDATION FAILED: repo.json tam olarak 1 adet pluginLists URL içermelidir (mevcut: {len(plugin_lists)}). Birden fazla URL CloudStream arayüzünde yinelenen eklentiye yol açar.")
+          if plugin_lists[0] != "https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json":
+              raise SystemExit(f"VALIDATION FAILED: repo.json builds plugin listesini göstermiyor: {plugin_lists[0]}")
+
+          simulated_plugins = []
+          for _ in plugin_lists:
+              simulated_plugins.extend(entries)
+          plugin_names = [p.get("internalName") for p in simulated_plugins]
+          if len(plugin_names) != len(set(plugin_names)):
+              raise SystemExit(f"VALIDATION FAILED: repo.json CloudStream içinde yinelenen eklenti girdisi oluşturuyor: {plugin_names}")
+
           expected_url = "https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3"
           if entry.get("url") != expected_url:
               raise SystemExit("VALIDATION FAILED: katalog plugin URL'si yanlış.")
+
 
           playlist_lines = Path("turkiye_ulusal_tv.m3u").read_text(encoding="utf-8").splitlines()
           playlist_entries = []
@@ -171,24 +204,6 @@ jobs:
           git remote remove origin 2>/dev/null || true
           git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force origin builds
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Sync repository catalog to main
-        shell: bash
-        run: |
-          cp build/plugins.json plugins.json
-          if ! git diff --quiet plugins.json; then
-            echo "Syncing plugins.json on main..."
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add plugins.json
-            git commit -m "Sync catalog metadata [skip ci]"
-            git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-            git push origin main
-          else
-            echo "plugins.json already up to date on main."
-          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -257,6 +272,49 @@ jobs:
           if actual_size != expected_size:
               raise SystemExit(f"REMOTE VERIFICATION FAILED: Size mismatch! Expected {expected_size}, got {actual_size}")
 
+          repo_url = f"https://raw.githubusercontent.com/{repo}/builds/repo.json?check={nonce}"
+          print(f"Checking remote repo manifest at {repo_url}...")
+          with urllib.request.urlopen(repo_url, timeout=15) as res:
+              remote_repo = json.loads(res.read().decode("utf-8"))
+          if len(remote_repo.get("pluginLists", [])) != 1:
+              raise SystemExit("REMOTE VERIFICATION FAILED: Uzak repo.json tekil pluginLists icermiyor!")
+
           print(f"REMOTE INTEGRITY VERIFIED: {actual_size} bytes, sha256-{actual_hash}")
           PY
+
+      - name: Sync repository catalog to main
+        shell: bash
+        run: |
+          cp build/plugins.json plugins.json
+          if ! git diff --quiet plugins.json; then
+            echo "Syncing plugins.json on main..."
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add plugins.json
+            git commit -m "Sync catalog metadata [skip ci]"
+            git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+            git push origin main
+          else
+            echo "plugins.json already up to date on main."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Rollback builds branch on failure
+        if: failure() && env.LAST_GOOD_BUILDS_SHA != ''
+        shell: bash
+        run: |
+          echo "================================================================="
+          echo "HATA: Derleme, doğrulama veya dağıtım testleri başarısız oldu!"
+          echo "CloudStream kullanıcılarının kesintisiz çalışabilmesi için builds"
+          echo "dalı son çalışan stabil commit'e geri alınıyor: ${LAST_GOOD_BUILDS_SHA}"
+          echo "================================================================="
+          cd builds
+          git fetch origin builds
+          git reset --hard "${LAST_GOOD_BUILDS_SHA}"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin builds
+          echo "Geri alma (rollback) tamamlandı. Kararlı son sürüm aktif tutuldu."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
