@@ -1148,8 +1148,18 @@ class TurkiyeTVProvider : MainAPI() {
         return channelResults + collectionResults
     }
 
+    private fun cleanChannelUrl(url: String): String =
+        url.removePrefix(mainUrl)
+            .removePrefix("https://github.com/Eikosa/tv")
+            .removePrefix("http://github.com/Eikosa/tv")
+            .removePrefix("/")
+
     override suspend fun load(url: String): LoadResponse {
-        channels.firstOrNull { it.streamUrl == url || it.id == url }?.let { channel ->
+        val cleanUrl = cleanChannelUrl(url)
+
+        channels.firstOrNull {
+            it.streamUrl == url || it.id == url || it.id == cleanUrl || it.streamUrl == cleanUrl
+        }?.let { channel ->
             return newLiveStreamLoadResponse(channel.name, channel.streamUrl, channel.streamUrl) {
                 posterUrl = channel.logoUrl
                 plot = "${channel.name}, Türkiye'de herkese açık canlı televizyon yayını."
@@ -1157,7 +1167,7 @@ class TurkiyeTVProvider : MainAPI() {
             }
         }
 
-        youtubeCollections.firstOrNull { it.id == url }?.let { collection ->
+        youtubeCollections.firstOrNull { it.id == url || it.id == cleanUrl }?.let { collection ->
             return loadYouTubeCollection(collection)
         }
 
@@ -1165,20 +1175,22 @@ class TurkiyeTVProvider : MainAPI() {
         // gönderirken kendi kimliğimiz yerine kaynak adresini kullanıyor.
         // Bu nedenle dışarıdan gelen doğrudan HLS ve YouTube canlı adreslerini
         // de yüklenebilir bir canlı sayfaya dönüştürüyoruz.
-        if (isYouTubeUrl(url)) {
+        val effectiveUrl = if (isYouTubeUrl(cleanUrl)) cleanUrl else url
+        if (isYouTubeUrl(url) || isYouTubeUrl(effectiveUrl)) {
+            val targetUrl = if (isYouTubeUrl(url)) url else effectiveUrl
             val collection = when {
-                url.contains("@discovery", ignoreCase = true) -> youtubeCollections.firstOrNull {
+                targetUrl.contains("@discovery", ignoreCase = true) -> youtubeCollections.firstOrNull {
                     it.id == "YouTubeCollection_DiscoveryChannelTurkiye"
                 }
-                url.contains("@nationalgeographic", ignoreCase = true) -> youtubeCollections.firstOrNull {
+                targetUrl.contains("@nationalgeographic", ignoreCase = true) -> youtubeCollections.firstOrNull {
                     it.id == "YouTubeCollection_NationalGeographicTurkiye"
                 }
                 else -> null
             }
             return newLiveStreamLoadResponse(
                 collection?.name ?: "YouTube Canlı Yayın",
-                url,
-                url,
+                targetUrl,
+                targetUrl,
             ) {
                 posterUrl = collection?.logoUrl
                 plot = "YouTube üzerindeki herkese açık canlı yayın."
@@ -1187,14 +1199,17 @@ class TurkiyeTVProvider : MainAPI() {
         }
 
         val directHls = url.substringBefore("?").substringBefore("#")
-        if ((url.startsWith("https://") || url.startsWith("http://")) &&
-            (directHls.endsWith(".m3u8", ignoreCase = true) || url.contains(".m3u8", ignoreCase = true))
+        val cleanDirectHls = cleanUrl.substringBefore("?").substringBefore("#")
+        val targetHlsUrl = if (directHls.endsWith(".m3u8", ignoreCase = true) || url.contains(".m3u8", ignoreCase = true)) url else cleanUrl
+        val targetDirectHls = targetHlsUrl.substringBefore("?").substringBefore("#")
+        if ((targetHlsUrl.startsWith("https://") || targetHlsUrl.startsWith("http://")) &&
+            (directHls.endsWith(".m3u8", ignoreCase = true) || targetDirectHls.endsWith(".m3u8", ignoreCase = true) || targetHlsUrl.contains(".m3u8", ignoreCase = true))
         ) {
-            val knownChannel = channels.firstOrNull { it.streamUrl == url || it.id == url }
+            val knownChannel = channels.firstOrNull { it.streamUrl == targetHlsUrl || it.id == targetHlsUrl || it.id == cleanUrl }
             return newLiveStreamLoadResponse(
                 knownChannel?.name ?: "Canlı HLS Yayını",
-                url,
-                url,
+                targetHlsUrl,
+                targetHlsUrl,
             ) {
                 posterUrl = knownChannel?.logoUrl
                 plot = "Doğrudan HLS canlı yayın adresi."
@@ -1211,8 +1226,11 @@ class TurkiyeTVProvider : MainAPI() {
         subtitleCallback: (com.lagradost.cloudstream3.SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
-        val channel = channels.firstOrNull { it.id == data || it.streamUrl == data }
-        val streamUrl = channel?.streamUrl ?: data
+        val cleanData = cleanChannelUrl(data)
+        val channel = channels.firstOrNull {
+            it.id == data || it.streamUrl == data || it.id == cleanData || it.streamUrl == cleanData
+        }
+        val streamUrl = channel?.streamUrl ?: cleanData.takeIf { it.startsWith("http://") || it.startsWith("https://") } ?: data
 
         if (isNowTvUrl(streamUrl) || channel?.id == "NOWTV.tr@SD") {
             return resolveNowTvStream(callback)
