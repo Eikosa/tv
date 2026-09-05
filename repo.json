@@ -1,0 +1,8 @@
+{
+    "name": "Türkiye Türkçe Canlı TV",
+    "description": "Türkiye canlı TV CloudStream eklentileri",
+    "manifestVersion": 1,
+    "pluginLists": [
+        "https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json"
+    ]
+}
