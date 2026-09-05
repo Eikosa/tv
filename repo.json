@@ -3,7 +3,7 @@
     "description": "Türkiye canlı TV CloudStream eklentileri",
     "manifestVersion": 1,
     "pluginLists": [
-        "https://cdn.jsdelivr.net/gh/Eikosa/tv@builds/plugins.json",
-        "https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json"
+        "https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json",
+        "https://cdn.jsdelivr.net/gh/Eikosa/tv@builds/plugins.json"
     ]
 }
