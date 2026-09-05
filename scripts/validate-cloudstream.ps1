@@ -240,6 +240,16 @@ $providerNames += [regex]::Matches($source, 'youtubeChannel\("[^"]+",\s*"([^"]+)
 Assert-Condition ($providerIds.Count -ge 220) "CloudStream katalog sayısı beklenenden az: $($providerIds.Count)."
 Assert-Condition (@($providerIds | Group-Object | Where-Object Count -gt 1).Count -eq 0) "CloudStream içinde yinelenen kanal kimliği bulundu."
 Assert-Condition (@($providerNames | Group-Object | Where-Object Count -gt 1).Count -eq 0) "CloudStream içinde yinelenen kanal adı bulundu."
+
+$simulationScript = Join-Path $repoRoot "scripts\test_channel_playback_simulation.py"
+if (Test-Path $simulationScript) {
+    $simOutput = python $simulationScript
+    if ($LASTEXITCODE -ne 0) {
+        Stop-Validation "CloudStream kanal oynatma ve URL ön ek simülasyonu başarısız:`n$simOutput"
+    }
+    Write-Host "  OK CloudStream kanal çözme ve URL simülasyonu ($($providerIds.Count) kanal)"
+}
+
 $allowedGroups = @('Genel', 'Haber', 'Spor', 'Müzik', 'Çocuk', 'Eğitim', 'Belgesel', 'Kültür / Genel', 'Dini', 'Eğlence', 'Yaşam', 'İş / Dizi', 'Dizi / YouTube', 'Yerel', 'Bölgesel', 'Uluslararası', 'Anime / Animasyon')
 $declaredGroups = @()
 $declaredGroups += [regex]::Matches($source, '(?m)^\s*group\s*=\s*"([^"]+)"') | ForEach-Object { $_.Groups[1].Value }
