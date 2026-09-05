@@ -6,11 +6,13 @@ CloudStream/Kotlin kataloğu ile M3U iki ayrı çıktıdır. Aynı kanalı ikisi
 
 ## Hızlı bağlantılar
 
-- M3U: `https://raw.githubusercontent.com/Eikosa/tv/main/turkiye_ulusal_tv.m3u`
-- EPG/XMLTV: `https://iptv-epg.org/files/epg-tr.xml`
-- CloudStream depo adresi (bunu ekleyin): `https://raw.githubusercontent.com/Eikosa/tv/main/repo.json`
-- CloudStream plugin listesi: `https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json`
-- CloudStream eklentisi: `https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3`
+> [!IMPORTANT]
+> **Doğru M3U Adresi:** IPTV oynatıcılara yalnızca `https://raw.githubusercontent.com/Eikosa/tv/` yazıldığında dosya adı belirtilmediği için GitHub 404 (Not Found) hatası verir ve kanallar yüklenmez. Oynatıcılarınıza aşağıdaki tam M3U bağlantılarından birini ekleyiniz:
+> - **M3U Playlist (Ana):** `https://raw.githubusercontent.com/Eikosa/tv/main/turkiye_ulusal_tv.m3u`
+> - **M3U Playlist (Kısa):** `https://raw.githubusercontent.com/Eikosa/tv/main/playlist.m3u`
+> - **EPG / XMLTV Rehberi:** `https://iptv-epg.org/files/epg-tr.xml`
+> - **CloudStream Depo Adresi (repo):** `https://raw.githubusercontent.com/Eikosa/tv/main/repo.json`
+> - **CloudStream Eklenti Paketi (.cs3):** `https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3`
 
 ## CloudStream kullanımı
 

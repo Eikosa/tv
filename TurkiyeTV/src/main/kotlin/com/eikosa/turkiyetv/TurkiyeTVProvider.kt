@@ -123,7 +123,7 @@ class TurkiyeTVProvider : MainAPI() {
         tvGardenChannel("TVGarden_Kanal26", "Kanal 26", "https://live.artidijitalmedya.com/artidijital_kanal26/kanal26/playlist.m3u8", "Yerel", 117, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-26-tr.png"),
         tvGardenChannel("TVGarden_Kanal3", "Kanal 3", "https://live.artidijitalmedya.com/artidijital_kanal3/kanal3/playlist.m3u8", "Yerel", 118, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal3-tr.png"),
         tvGardenChannel("TVGarden_Kanal33", "Kanal 33", "https://edge2.taksimbilisim.com/kanal33/bant1/playlist.m3u8", "Yerel", 119, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-33-tr.png"),
-        tvGardenChannel("TVGarden_Kanal34", "Kanal 34", "https://live.euromediacenter.com/kanal34/tracks-v1a1/playlist.m3u8", "Yerel", 120),
+        tvGardenChannel("TVGarden_MTurk", "MTürk TV", "https://edge1.socialsmart.tv/muglaturk/bant1/playlist.m3u8", "Yerel", 120, "https://ui-avatars.com/api/?name=MTurk+TV&background=0284c7&color=fff&size=256&bold=true&format=png"),
         tvGardenChannel("TVGarden_Kanal58", "Kanal 58", "https://live.artidijitalmedya.com/artidijital_kanal58/kanal58/playlist.m3u8", "Yerel", 121, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-58-tr.png"),
         tvGardenChannel("TVGarden_Kanal7Avrupa", "Kanal 7 Avrupa", "https://livetv.radyotvonline.net/kanal7live/kanal7avr/playlist.m3u8", "Genel", 122, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-7-avrupa-tr.png"),
         tvGardenChannel("TVGarden_KanalAvrupa", "Kanal Avrupa", "https://cdn-kanalavrupa.yayin.com.tr/kanalavrupa/tracks-v2a1/playlist.m3u8", "Genel", 123, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/kanal-avrupa-tr.png"),
@@ -214,7 +214,7 @@ class TurkiyeTVProvider : MainAPI() {
         tvGardenChannel("Public_DHA", "DHA", "https://603c568fccdf5.streamlock.net/live/dhaweb1_C5efC/playlist.m3u8", "Haber", 304),
         tvGardenChannel("Public_ETVManisa", "ETV Manisa", "https://edge1.socialsmart.tv/manisaetv/bant1/playlist.m3u8", "Yerel", 305),
         tvGardenChannel("Public_FBTV", "Fenerbahçe TV", "https://1hskrdto.rocketcdn.com/fenerbahcetv.smil/playlist.m3u8", "Spor", 306),
-        tvGardenChannel("Public_FlashHaber", "Flash Haber TV", "https://b01c02nl.mediatriple.net/videoonlylive/mtyycglqauzjhlive/broadcast_67c053c48829f.smil/playlist.m3u8", "Haber", 307),
+        tvGardenChannel("Public_RedBullTV", "Red Bull TV", "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8", "Spor", 307, "https://ui-avatars.com/api/?name=Red+Bull+TV&background=dc2626&color=fff&size=256&bold=true&format=png"),
         tvGardenChannel("Public_MedMuzik", "Med Müzik", "http://54.36.110.140/live3/live3.m3u8", "Müzik", 308),
         tvGardenChannel("GEMPixel.tr", "GEM Pixel", "https://glserver1.tamashaland.com/live/aBCH96886YznRbGOiqTnnQ__/stream_0.m3u8", "Eğlence", 309, "https://ui-avatars.com/api/?name=GEM+Pixel&background=312e81&color=fff&size=256&bold=true&format=png"),
         tvGardenChannel("Public_NaturalTV", "Natural TV", "https://edge1.socialsmart.tv/naturaltv/bant1/playlist.m3u8", "Yaşam", 310),
@@ -222,7 +222,7 @@ class TurkiyeTVProvider : MainAPI() {
         tvGardenChannel("Public_DocumentaryPlus", "Documentary+", "https://ef79b15c8c7c46c7a9de9d33001dbd07.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-859-DOCUMENTARYPLUS-DOCUMENTARYPLUS/mt/documentaryplus/859/hls/master/playlist.m3u8", "Belgesel", 314),
         tvGardenChannel("Public_CGTNDocumentary", "CGTN Documentary", "https://hlspackager.akamaized.net/live/DB/CGTN_DOCUMENTARY/HLS/CGTN_DOCUMENTARY.m3u8", "Belgesel", 315),
         tvGardenChannel("Public_AsharqDocumentary", "Asharq Documentary", "https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8", "Belgesel", 316),
-        tvGardenChannel("Public_Satranç", "Satranç TV", "http://139.162.182.79/live/test/index.m3u8", "Eğitim", 318),
+        tvGardenChannel("Public_FlashHaber", "Flash Haber TV", "https://b01c02nl.mediatriple.net/videoonlylive/mtyycglqauzjhlive/broadcast_67c053c48829f.smil/playlist.m3u8", "Haber", 318, "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/flash-tv-tr.png"),
         tvGardenChannel("Public_TJKTV2", "TJK TV 2", "https://tjktv-live.tjk.org/tjktv2/tjktv2.m3u8", "Spor", 319),
         tvGardenChannel("Public_ZarokTV", "Zarok TV", "https://zindikurmanci.zaroktv.com.tr/hls/stream.m3u8", "Çocuk", 321),
         tvGardenChannel("Public_TRTWorld", "TRT World", "https://tv-trtworld.medya.trt.com.tr/master.m3u8", "Uluslararası", 324),
@@ -689,10 +689,10 @@ class TurkiyeTVProvider : MainAPI() {
             channelNumber = 52,
         ),
         TvChannel(
-            id = "FinansTurkTV.tr@SD",
-            name = "Finans Turk TV",
-            streamUrl = "https://yayin30.haber100.com/live/finansturk/playlist.m3u8",
-            logoUrl = "https://i.ibb.co/wBwmB1T/iY0osc7.png",
+            id = "MeclisTV.tr@SD",
+            name = "Meclis TV",
+            streamUrl = "https://meclistv-live.ercdn.net/meclistv/meclistv_720p.m3u8",
+            logoUrl = "https://raw.githubusercontent.com/tv-logo/tv-logos/main/countries/turkey/tbmm-tv-tr.png",
             group = "Haber",
             channelNumber = 53,
         ),
@@ -1150,7 +1150,7 @@ class TurkiyeTVProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         channels.firstOrNull { it.streamUrl == url || it.id == url }?.let { channel ->
-            return newLiveStreamLoadResponse(channel.name, channel.id, channel.streamUrl) {
+            return newLiveStreamLoadResponse(channel.name, channel.streamUrl, channel.streamUrl) {
                 posterUrl = channel.logoUrl
                 plot = "${channel.name}, Türkiye'de herkese açık canlı televizyon yayını."
                 tags = listOf("Türkiye", channel.group, "Canlı TV")
@@ -1190,7 +1190,7 @@ class TurkiyeTVProvider : MainAPI() {
         if ((url.startsWith("https://") || url.startsWith("http://")) &&
             (directHls.endsWith(".m3u8", ignoreCase = true) || url.contains(".m3u8", ignoreCase = true))
         ) {
-            val knownChannel = channels.firstOrNull { it.streamUrl == url }
+            val knownChannel = channels.firstOrNull { it.streamUrl == url || it.id == url }
             return newLiveStreamLoadResponse(
                 knownChannel?.name ?: "Canlı HLS Yayını",
                 url,
@@ -1211,37 +1211,43 @@ class TurkiyeTVProvider : MainAPI() {
         subtitleCallback: (com.lagradost.cloudstream3.SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
-        if (isNowTvUrl(data)) {
+        val channel = channels.firstOrNull { it.id == data || it.streamUrl == data }
+        val streamUrl = channel?.streamUrl ?: data
+
+        if (isNowTvUrl(streamUrl) || channel?.id == "NOWTV.tr@SD") {
             return resolveNowTvStream(callback)
         }
 
-        if (isYouTubeUrl(data)) {
+        if (isYouTubeUrl(streamUrl)) {
             // Bazı CloudStream/NewPipe sürümleri canlı yayında loadExtractor'dan
             // true döndürüp hiç link üretmeyebiliyor. Önce doğrudan YouTube'un
             // canlı HLS manifestini almayı deniyoruz; olmazsa yerleşik çözücülere
             // geri dönüyoruz.
-            if (resolveYouTubeLive(data, callback)) return true
+            if (resolveYouTubeLive(streamUrl, callback)) return true
 
             var extracted = false
             val trackingCallback: (ExtractorLink) -> Unit = { link ->
                 extracted = true
                 callback(link)
             }
-            runCatching { loadExtractor(data, subtitleCallback, trackingCallback) }
+            runCatching { loadExtractor(streamUrl, subtitleCallback, trackingCallback) }
             return extracted
         }
 
-        if (data.substringBefore("?").substringBefore("#") == TEVE2_STREAM_URL.substringBefore("?")) {
+        if (streamUrl.substringBefore("?").substringBefore("#") == TEVE2_STREAM_URL.substringBefore("?") || channel?.id == "Teve2.tr@SD") {
             return resolveTeve2Stream(callback)
         }
 
-        val streamPath = data.substringBefore("?").substringBefore("#")
-        val isHlsUrl = streamPath.endsWith(".m3u8", ignoreCase = true) || data.contains(".m3u8", ignoreCase = true)
-        if (!(data.startsWith("https://") || data.startsWith("http://")) || !isHlsUrl) return false
+        val streamPath = streamUrl.substringBefore("?").substringBefore("#")
+        val isHlsUrl = streamPath.endsWith(".m3u8", ignoreCase = true) || streamUrl.contains(".m3u8", ignoreCase = true)
+        if (!(streamUrl.startsWith("https://") || streamUrl.startsWith("http://")) || !isHlsUrl) return false
 
-        callback(newExtractorLink(source = name, name = "${name} • HLS", url = data, type = ExtractorLinkType.M3U8) {
+        callback(newExtractorLink(source = name, name = "${name} • HLS", url = streamUrl, type = ExtractorLinkType.M3U8) {
             referer = ""
             quality = Qualities.Unknown.value
+            headers = mapOf(
+                "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+            )
         })
         return true
     }
