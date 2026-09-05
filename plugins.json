@@ -12,7 +12,7 @@
             "Live",
             "TvSeries"
         ],
-        "version": 7,
+        "version": 8,
         "internalName": "TurkiyeTV",
         "description": "T\u00fcrkiye ulusal televizyon kanallar\u0131n\u0131 CloudStream \u00fczerinden izleyin.",
         "url": "https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3",

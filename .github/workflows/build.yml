@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Checkout builds branch
         uses: actions/checkout@v4
@@ -158,6 +160,7 @@ jobs:
         run: |
           cp TurkiyeTV/build/*.cs3 builds/
           cp build/plugins.json builds/
+          cp repo.json builds/
           cd builds
           git init
           git config user.name "github-actions[bot]"
@@ -170,3 +173,90 @@ jobs:
           git push --force origin builds
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync repository catalog to main
+        shell: bash
+        run: |
+          cp build/plugins.json plugins.json
+          if ! git diff --quiet plugins.json; then
+            echo "Syncing plugins.json on main..."
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add plugins.json
+            git commit -m "Sync catalog metadata [skip ci]"
+            git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+            git push origin main
+          else
+            echo "plugins.json already up to date on main."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Purge CDN caches
+        shell: bash
+        run: |
+          echo "Purging jsDelivr edge caches..."
+          for path in \
+            "gh/${GITHUB_REPOSITORY}@builds/plugins.json" \
+            "gh/${GITHUB_REPOSITORY}@builds/TurkiyeTV.cs3" \
+            "gh/${GITHUB_REPOSITORY}@builds/repo.json" \
+            "gh/${GITHUB_REPOSITORY}@main/plugins.json" \
+            "gh/${GITHUB_REPOSITORY}@main/repo.json"; do
+            echo "Purging https://purge.jsdelivr.net/$path"
+            curl -sf "https://purge.jsdelivr.net/$path" || true
+          done
+
+      - name: Verify remote deployment integrity
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          import time
+          import urllib.request
+
+          repo = os.environ["GITHUB_REPOSITORY"]
+          nonce = int(time.time())
+          builds_plugins_url = f"https://raw.githubusercontent.com/{repo}/builds/plugins.json?check={nonce}"
+
+          print(f"Checking remote catalog at {builds_plugins_url}...")
+          catalog = None
+          for attempt in range(1, 6):
+              try:
+                  with urllib.request.urlopen(builds_plugins_url, timeout=15) as res:
+                      catalog = json.loads(res.read().decode("utf-8"))
+                  break
+              except Exception as err:
+                  if attempt == 5:
+                      raise SystemExit(f"REMOTE VERIFICATION FAILED: {err}")
+                  time.sleep(2 * attempt)
+
+          entry = catalog[0]
+          expected_hash = entry["fileHash"].removeprefix("sha256-")
+          expected_size = int(entry["fileSize"])
+          cs3_url = f"{entry['url']}?check={nonce}"
+
+          print(f"Downloading remote package from {cs3_url}...")
+          cs3_data = b""
+          for attempt in range(1, 6):
+              try:
+                  with urllib.request.urlopen(cs3_url, timeout=20) as res:
+                      cs3_data = res.read()
+                  break
+              except Exception as err:
+                  if attempt == 5:
+                      raise SystemExit(f"REMOTE VERIFICATION FAILED: {err}")
+                  time.sleep(2 * attempt)
+
+          actual_hash = hashlib.sha256(cs3_data).hexdigest()
+          actual_size = len(cs3_data)
+
+          if actual_hash != expected_hash:
+              raise SystemExit(f"REMOTE VERIFICATION FAILED: SHA-256 mismatch! Expected {expected_hash}, got {actual_hash}")
+          if actual_size != expected_size:
+              raise SystemExit(f"REMOTE VERIFICATION FAILED: Size mismatch! Expected {expected_size}, got {actual_size}")
+
+          print(f"REMOTE INTEGRITY VERIFIED: {actual_size} bytes, sha256-{actual_hash}")
+          PY
+

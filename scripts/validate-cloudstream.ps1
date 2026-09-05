@@ -172,8 +172,18 @@ $buildConfig = Get-Content (Join-Path $repoRoot "TurkiyeTV\build.gradle.kts") -R
 $versionMatch = [regex]::Match($buildConfig, '(?m)^version\s*=\s*(\d+)')
 Assert-Condition $versionMatch.Success "TurkiyeTV sürümü build.gradle.kts içinde bulunamadı."
 $expectedVersion = [int]$versionMatch.Groups[1].Value
+if (-not (Test-Path $packagePath) -and $SkipBuild) {
+    Write-Host "Yerel paket bulunamadı, builds dalından indiriliyor..."
+    $cs3Dir = Split-Path $packagePath -Parent
+    if (-not (Test-Path $cs3Dir)) { New-Item -ItemType Directory -Path $cs3Dir -Force | Out-Null }
+    $buildJsonDir = Split-Path $generatedListPath -Parent
+    if (-not (Test-Path $buildJsonDir)) { New-Item -ItemType Directory -Path $buildJsonDir -Force | Out-Null }
+    Invoke-WebRequest "https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3" -OutFile $packagePath -UseBasicParsing
+    Invoke-WebRequest "https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json" -OutFile $generatedListPath -UseBasicParsing
+}
 Assert-Condition (Test-Path $packagePath) "TurkiyeTV.cs3 oluşturulmadı."
 Assert-Condition (Test-Path $generatedListPath) "build/plugins.json oluşturulmadı."
+
 
 Write-Host "[2/8] Paket, manifest ve yerel metadata doğrulanıyor..."
 $packageBytes = [IO.File]::ReadAllBytes($packagePath)
@@ -317,17 +327,21 @@ if (-not $SkipNetwork) {
 }
 
 if ($CheckRemote) {
-    Write-Host "[8/8] GitHub builds dalı doğrulanıyor..."
+    Write-Host "[8/8] GitHub builds dalı ve uzak paket doğrulanıyor..."
     $nonce = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()
-    $remoteMeta = ((Invoke-WebRequest "https://raw.githubusercontent.com/Eikosa/tv/main/plugins.json?check=$nonce" -UseBasicParsing).Content | ConvertFrom-Json)[0]
+    $remoteMeta = ((Invoke-WebRequest "https://raw.githubusercontent.com/Eikosa/tv/builds/plugins.json?check=$nonce" -UseBasicParsing).Content | ConvertFrom-Json)[0]
     $remoteResponse = Invoke-WebRequest "$($remoteMeta.url)?check=$nonce" -UseBasicParsing
     $memory = New-Object IO.MemoryStream
     $remoteResponse.RawContentStream.CopyTo($memory)
     $remoteData = $memory.ToArray()
     $remoteHash = ([BitConverter]::ToString([Security.Cryptography.SHA256]::Create().ComputeHash($remoteData))).Replace("-", "").ToLowerInvariant()
-    Assert-Condition ($remoteHash -eq $remoteMeta.fileHash.Replace("sha256-", "")) "GitHub paketi ile metadata hash'i eşleşmiyor."
-    Assert-Condition ($remoteData.Length -eq [int64]$remoteMeta.fileSize) "GitHub paketi ile metadata boyutu eşleşmiyor."
+    Assert-Condition ($remoteHash -eq $remoteMeta.fileHash.Replace("sha256-", "")) "GitHub builds paketi ile metadata hash'i eşleşmiyor."
+    Assert-Condition ($remoteData.Length -eq [int64]$remoteMeta.fileSize) "GitHub builds paketi ile metadata boyutu eşleşmiyor."
     Assert-Condition ([int]$remoteMeta.version -eq $expectedVersion) "GitHub plugin sürümü beklenen $expectedVersion değil."
+
+    $mainMeta = ((Invoke-WebRequest "https://raw.githubusercontent.com/Eikosa/tv/main/plugins.json?check=$nonce" -UseBasicParsing).Content | ConvertFrom-Json)[0]
+    Assert-Condition ($mainMeta.fileHash -eq $remoteMeta.fileHash) "main dalındaki plugins.json hash'i ($($mainMeta.fileHash)) builds dalındaki hash ($($remoteMeta.fileHash)) ile eşleşmiyor."
+    Write-Host "  OK Uzak paket ve kataloglar doğrulandı (SHA-256: $remoteHash, Sürüm: $expectedVersion)"
 } else { Write-Host "[8/8] Uzak GitHub kontrolü atlandı (-CheckRemote verilmedi)." }
 
 Write-Host "VALIDATION PASSED: Paket, katalog, HLS parçaları, logolar, YouTube, EPG ve özel çözücüler başarılı."

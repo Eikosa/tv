@@ -1,4 +1,4 @@
-version = 7
+version = 8
 cloudstream {
     description = "Türkiye ulusal televizyon kanallarını CloudStream üzerinden izleyin."
     authors = listOf("Eikosa")
