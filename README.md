@@ -13,6 +13,7 @@ CloudStream/Kotlin kataloğu ile M3U iki ayrı çıktıdır. Aynı kanalı ikisi
 > - **EPG / XMLTV Rehberi:** `https://iptv-epg.org/files/epg-tr.xml`
 > - **CloudStream Depo Adresi (repo):** `https://raw.githubusercontent.com/Eikosa/tv/main/repo.json`
 > - **CloudStream Eklenti Paketi (.cs3):** `https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3`
+> - **Bozuk ve Eksik Yayınlar Takip Listesi:** [BOZUK_VE_EKSIK_YAYINLAR.md](BOZUK_VE_EKSIK_YAYINLAR.md)
 
 ## CloudStream kullanımı
 
