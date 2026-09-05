@@ -1,9 +1,9 @@
 [
     {
-        "fileHash": "sha256-eb5babc04d6151c3ab4cf85a640a907b92f4d2dd2ebaba80065b13ab1c9318fa",
+        "fileHash": "sha256-2a5b10a1a53b844013f31a52289fdb865566f8f13cd213eb39f1e08a0343a30f",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Eikosa/tv",
-        "fileSize": 43283,
+        "fileSize": 43606,
         "status": 1,
         "authors": [
             "Eikosa"
@@ -12,7 +12,7 @@
             "Live",
             "TvSeries"
         ],
-        "version": 6,
+        "version": 7,
         "internalName": "TurkiyeTV",
         "description": "T\u00fcrkiye ulusal televizyon kanallar\u0131n\u0131 CloudStream \u00fczerinden izleyin.",
         "url": "https://raw.githubusercontent.com/Eikosa/tv/builds/TurkiyeTV.cs3",
